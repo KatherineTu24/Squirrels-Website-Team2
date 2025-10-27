@@ -1,0 +1,3582 @@
+@prefix :        <https://example.org/squirrel#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+### Ontology header
+
+<https://example.org/squirrel>
+  a owl:Ontology ;
+  dcterms:title "Tail Trails – Squirrel Sighting Ontology"@en ;
+  dcterms:description "Vocabulary for modeling urban squirrel sightings: sightings, parks, areas, activities, and attributes. Encodes cardinalities and property chain for inferring in-area."@en ;
+  owl:versionInfo "1.0" .
+
+### Classes
+
+:Sighting a owl:Class ;
+  rdfs:label "Sighting"@en ;
+  rdfs:comment "Single observation event (central entity)"@en .
+
+:Park a owl:Class ;
+  rdfs:label "Park"@en ;
+  rdfs:comment "Physical park of observation"@en .
+
+:Area a owl:Class ;
+  rdfs:label "Area"@en ;
+  rdfs:comment "Geographic grouping of parks"@en .
+
+:Activity a owl:Class ;
+  rdfs:label "Activity"@en ;
+  rdfs:comment "Observed squirrel behavior (multi-valued)"@en .
+
+:FurColor a owl:Class ;
+  rdfs:label "Fur Color"@en ;
+  rdfs:comment "Controlled color terms"@en .
+
+:Perch a owl:Class ;
+  rdfs:label "Perch"@en ;
+  rdfs:comment "Physical position (ground, tree, fence)"@en .
+
+### Object Properties
+
+:inPark a owl:ObjectProperty , owl:FunctionalProperty ;
+  rdfs:label "in park"@en ;
+  rdfs:comment "The park where the sighting occurred (exactly 1)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range :Park .
+
+:parkInArea a owl:ObjectProperty , owl:FunctionalProperty ;
+  rdfs:label "park in area"@en ;
+  rdfs:comment "The geographic area where the park is located (exactly 1)"@en ;
+  rdfs:domain :Park ;
+  rdfs:range :Area .
+
+:inArea a owl:ObjectProperty , owl:FunctionalProperty ;
+  rdfs:label "in area"@en ;
+  rdfs:comment "The geographic area where the sighting occurred (inferred from inPark ∘ parkInArea)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range :Area ;
+  owl:propertyChainAxiom ( :inPark :parkInArea ) .
+
+:hasActivity a owl:ObjectProperty ;
+  rdfs:label "has activity"@en ;
+  rdfs:comment "Observed squirrel behavior (multiple allowed)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range :Activity .
+
+:hasFurColor a owl:ObjectProperty , owl:FunctionalProperty ;
+  rdfs:label "has fur color"@en ;
+  rdfs:comment "The fur color of the observed squirrel (exactly 1)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range :FurColor .
+
+:hasPerch a owl:ObjectProperty , owl:FunctionalProperty ;
+  rdfs:label "has perch"@en ;
+  rdfs:comment "Physical position where squirrel was observed (optional)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range :Perch .
+
+### Datatype Properties
+
+:sightingId a owl:DatatypeProperty , owl:FunctionalProperty ;
+  rdfs:label "sighting ID"@en ;
+  rdfs:comment "Unique identifier for the sighting"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range xsd:string .
+
+:observedOn a owl:DatatypeProperty , owl:FunctionalProperty ;
+  rdfs:label "observed on"@en ;
+  rdfs:comment "Date when sighting occurred (required)"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range xsd:date .
+
+
+:latitude a owl:DatatypeProperty , owl:FunctionalProperty ;
+  rdfs:label "latitude"@en ;
+  rdfs:comment "Latitude coordinate of sighting location"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range xsd:double .
+
+:longitude a owl:DatatypeProperty , owl:FunctionalProperty ;
+  rdfs:label "longitude"@en ;
+  rdfs:comment "Longitude coordinate of sighting location"@en ;
+  rdfs:domain :Sighting ;
+  rdfs:range xsd:double .
+
+### Constraints
+
+# Each Sighting: 1 park, 1 area (inferred), 1 color, 0-1 perch (optional), 1 date, 1 count, 1 coordinate pair
+:Sighting rdfs:subClassOf
+    (  # object property cardinalities
+       [ a owl:Restriction ; owl:onProperty :inPark     ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass :Park ]
+       [ a owl:Restriction ; owl:onProperty :inArea     ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass :Area ]
+       [ a owl:Restriction ; owl:onProperty :hasFurColor; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass :FurColor ]
+       [ a owl:Restriction ; owl:onProperty :hasPerch   ; owl:maxCardinality "1"^^xsd:nonNegativeInteger ]  # optional perch
+       [ a owl:Restriction ; owl:onProperty :hasActivity; owl:minCardinality "1"^^xsd:nonNegativeInteger ]  # multiple activities possible
+    ),
+    (  # data property cardinalities
+       [ a owl:Restriction ; owl:onProperty :sightingId ; owl:cardinality "1"^^xsd:nonNegativeInteger ]
+       [ a owl:Restriction ; owl:onProperty :observedOn ; owl:cardinality "1"^^xsd:nonNegativeInteger ]
+       [ a owl:Restriction ; owl:onProperty :latitude   ; owl:cardinality "1"^^xsd:nonNegativeInteger ]
+       [ a owl:Restriction ; owl:onProperty :longitude  ; owl:cardinality "1"^^xsd:nonNegativeInteger ]
+    ) .
+
+# Each Park: exactly 1 area
+:Park rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty :parkInArea ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass :Area ] .
+
+### Instances
+
+### Area instances
+:area_brooklyn a :Area ;
+    rdfs:label "BROOKLYN"@en .
+
+:area_central_manhattan a :Area ;
+    rdfs:label "CENTRAL MANHATTAN"@en .
+
+:area_lower_manhattan a :Area ;
+    rdfs:label "LOWER MANHATTAN"@en .
+
+:area_upper_manhattan a :Area ;
+    rdfs:label "UPPER MANHATTAN"@en .
+
+### Park instances
+:park_battery_park a :Park ;
+    rdfs:label "Battery Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_city_hall_park a :Park ;
+    rdfs:label "City Hall Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_columbus_park a :Park ;
+    rdfs:label "Columbus Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_corlears_hook_park a :Park ;
+    rdfs:label "Corlears Hook Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_fort_tryon_park a :Park ;
+    rdfs:label "Fort Tryon Park"@en ;
+    :parkInArea :area_upper_manhattan .
+
+:park_highbridge_park a :Park ;
+    rdfs:label "Highbridge Park"@en ;
+    :parkInArea :area_upper_manhattan .
+
+:park_j_hood_wright_park a :Park ;
+    rdfs:label "J. Hood Wright Park"@en ;
+    :parkInArea :area_upper_manhattan .
+
+:park_john_v_lindsay_east_river_park a :Park ;
+    rdfs:label "John V. Lindsay East River Park"@en ;
+    :parkInArea :area_central_manhattan .
+
+:park_madison_square_park a :Park ;
+    rdfs:label "Madison Square Park"@en ;
+    :parkInArea :area_central_manhattan .
+
+:park_marcus_garvey_park a :Park ;
+    rdfs:label "Marcus Garvey Park"@en ;
+    :parkInArea :area_upper_manhattan .
+
+:park_mccarren_park a :Park ;
+    rdfs:label "McCarren Park"@en ;
+    :parkInArea :area_brooklyn .
+
+:park_msgr_mcgolrick_park a :Park ;
+    rdfs:label "Msgr. McGolrick Park"@en ;
+    :parkInArea :area_brooklyn .
+
+:park_seward_park a :Park ;
+    rdfs:label "Seward Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_st_nicholas_park a :Park ;
+    rdfs:label "St. Nicholas Park"@en ;
+    :parkInArea :area_upper_manhattan .
+
+:park_stuyvesant_square_park a :Park ;
+    rdfs:label "Stuyvesant Square Park"@en ;
+    :parkInArea :area_central_manhattan .
+
+:park_teardrop_park a :Park ;
+    rdfs:label "Teardrop Park"@en ;
+    :parkInArea :area_lower_manhattan .
+
+:park_union_square_park a :Park ;
+    rdfs:label "Union Square Park"@en ;
+    :parkInArea :area_central_manhattan .
+
+:park_washington_square_park a :Park ;
+    rdfs:label "Washington Square Park"@en ;
+    :parkInArea :area_central_manhattan .
+
+### Fur Color instances
+:fur_black a :FurColor ;
+    rdfs:label "Black"@en .
+
+:fur_cinnamon a :FurColor ;
+    rdfs:label "Cinnamon"@en .
+
+:fur_gray a :FurColor ;
+    rdfs:label "Gray"@en .
+
+### Perch instances
+:perch_above_ground a :Perch ;
+    rdfs:label "Above Ground"@en .
+
+:perch_ground_plane a :Perch ;
+    rdfs:label "Ground Plane"@en .
+
+:perch_moving a :Perch ;
+    rdfs:label "Moving"@en .
+
+### Activity instances
+:activity_battery a :Activity ;
+    rdfs:label "battery"@en .
+
+:activity_burying a :Activity ;
+    rdfs:label "Burying"@en .
+
+:activity_chasing a :Activity ;
+    rdfs:label "Chasing"@en .
+
+:activity_chattering a :Activity ;
+    rdfs:label "Chattering"@en .
+
+:activity_chillin_ a :Activity ;
+    rdfs:label "Chillin'"@en .
+
+:activity_chilling a :Activity ;
+    rdfs:label "Chilling"@en .
+
+:activity_cleaning a :Activity ;
+    rdfs:label "Cleaning"@en .
+
+:activity_climbing a :Activity ;
+    rdfs:label "Climbing"@en .
+
+:activity_climbing_down_ a :Activity ;
+    rdfs:label "Climbing (down)"@en .
+
+:activity_climbing_tree_ a :Activity ;
+    rdfs:label "Climbing (tree)"@en .
+
+:activity_defending_tree a :Activity ;
+    rdfs:label "Defending tree"@en .
+
+:activity_digging a :Activity ;
+    rdfs:label "Digging"@en .
+
+:activity_digging_something a :Activity ;
+    rdfs:label "Digging something"@en .
+
+:activity_ear_scratching a :Activity ;
+    rdfs:label "Ear scratching"@en .
+
+:activity_eating a :Activity ;
+    rdfs:label "Eating"@en .
+
+:activity_eating_bread_crumbs_ a :Activity ;
+    rdfs:label "Eating (bread crumbs)"@en .
+
+:activity_eating_nuts_ a :Activity ;
+    rdfs:label "Eating (nuts)"@en .
+
+:activity_eating_or_pretending_to_eat_ a :Activity ;
+    rdfs:label "Eating (or pretending to eat)"@en .
+
+:activity_eating_peanuts_ a :Activity ;
+    rdfs:label "Eating (peanuts)"@en .
+
+:activity_eating_tortilla_chip_ a :Activity ;
+    rdfs:label "Eating (tortilla/chip)"@en .
+
+:activity_foraging a :Activity ;
+    rdfs:label "Foraging"@en .
+
+:activity_frolicking a :Activity ;
+    rdfs:label "Frolicking"@en .
+
+:activity_grooming a :Activity ;
+    rdfs:label "Grooming"@en .
+
+:activity_guarding a :Activity ;
+    rdfs:label "Guarding"@en .
+
+:activity_hangin_with_13_14 a :Activity ;
+    rdfs:label "Hangin' with #13 & #14"@en .
+
+:activity_hanging a :Activity ;
+    rdfs:label "Hanging"@en .
+
+:activity_hanging_out a :Activity ;
+    rdfs:label "Hanging out"@en .
+
+:activity_jumped_to_building a :Activity ;
+    rdfs:label "Jumped to building"@en .
+
+:activity_jumping a :Activity ;
+    rdfs:label "Jumping"@en .
+
+:activity_nesting_gathering_leaves a :Activity ;
+    rdfs:label "Nesting/gathering leaves"@en .
+
+:activity_prancing_about a :Activity ;
+    rdfs:label "Prancing about"@en .
+
+:activity_resting_in_tree a :Activity ;
+    rdfs:label "Resting in tree"@en .
+
+:activity_rubbing_butt_on_ground a :Activity ;
+    rdfs:label "Rubbing butt on ground"@en .
+
+:activity_running a :Activity ;
+    rdfs:label "Running"@en .
+
+:activity_scratching a :Activity ;
+    rdfs:label "Scratching"@en .
+
+:activity_self-cleaning a :Activity ;
+    rdfs:label "Self-cleaning"@en .
+
+:activity_shouting a :Activity ;
+    rdfs:label "shouting"@en .
+
+:activity_sitting a :Activity ;
+    rdfs:label "Sitting"@en .
+
+:activity_sitting_in_short_tree a :Activity ;
+    rdfs:label "Sitting in short tree"@en .
+
+:activity_sleeping a :Activity ;
+    rdfs:label "Sleeping"@en .
+
+:activity_sleeping_dead_ a :Activity ;
+    rdfs:label "Sleeping (Dead?)"@en .
+
+:activity_snacking_in_a_tree a :Activity ;
+    rdfs:label "Snacking in a tree"@en .
+
+:activity_sticking_out_of_a_tree a :Activity ;
+    rdfs:label "Sticking out of a tree"@en .
+
+:activity_very_carefully_watching_a_cat a :Activity ;
+    rdfs:label "Very carefully watching a cat"@en .
+
+:activity_vocalization_at_us a :Activity ;
+    rdfs:label "Vocalization at us"@en .
+
+:activity_watching_2 a :Activity ;
+    rdfs:label "Watching #2"@en .
+
+### Sighting instances
+:sighting_a-01-01 a :Sighting ;
+    :sightingId "A-01-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.85941 ;
+    :longitude -73.933936 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-01-02 a :Sighting ;
+    :sightingId "A-01-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859436 ;
+    :longitude -73.933937 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-01-03 a :Sighting ;
+    :sightingId "A-01-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859416 ;
+    :longitude -73.933894 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_digging_something .
+
+:sighting_a-01-04 a :Sighting ;
+    :sightingId "A-01-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859418 ;
+    :longitude -73.933895 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-01-05 a :Sighting ;
+    :sightingId "A-01-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859493 ;
+    :longitude -73.93359 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating .
+
+:sighting_a-01-06 a :Sighting ;
+    :sightingId "A-01-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.860825 ;
+    :longitude -73.932871 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-01-07 a :Sighting ;
+    :sightingId "A-01-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.860225 ;
+    :longitude -73.933143 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-01-08 a :Sighting ;
+    :sightingId "A-01-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859965 ;
+    :longitude -73.933412 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-01-09 a :Sighting ;
+    :sightingId "A-01-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859892 ;
+    :longitude -73.933326 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-01-10 a :Sighting ;
+    :sightingId "A-01-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859636 ;
+    :longitude -73.933717 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_digging .
+
+:sighting_a-01-11 a :Sighting ;
+    :sightingId "A-01-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859576 ;
+    :longitude -73.933738 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_digging .
+
+:sighting_a-01-12 a :Sighting ;
+    :sightingId "A-01-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.859989 ;
+    :longitude -73.934544 ;
+    :inPark :park_fort_tryon_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-01 a :Sighting ;
+    :sightingId "A-02-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.845749 ;
+    :longitude -73.9407 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-02 a :Sighting ;
+    :sightingId "A-02-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.845875 ;
+    :longitude -73.940808 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-03 a :Sighting ;
+    :sightingId "A-02-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.845875 ;
+    :longitude -73.940808 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-04 a :Sighting ;
+    :sightingId "A-02-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846088 ;
+    :longitude -73.940613 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-05 a :Sighting ;
+    :sightingId "A-02-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846088 ;
+    :longitude -73.940613 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-06 a :Sighting ;
+    :sightingId "A-02-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846088 ;
+    :longitude -73.940613 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-08 a :Sighting ;
+    :sightingId "A-02-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846222 ;
+    :longitude -73.94094 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging ;
+    :hasActivity :activity_nesting_gathering_leaves .
+
+:sighting_a-02-09 a :Sighting ;
+    :sightingId "A-02-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846197 ;
+    :longitude -73.941026 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chasing .
+
+:sighting_a-02-10 a :Sighting ;
+    :sightingId "A-02-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846185 ;
+    :longitude -73.940613 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-11 a :Sighting ;
+    :sightingId "A-02-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846271 ;
+    :longitude -73.940579 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_a-02-12 a :Sighting ;
+    :sightingId "A-02-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846332 ;
+    :longitude -73.940369 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-02-13 a :Sighting ;
+    :sightingId "A-02-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846332 ;
+    :longitude -73.940369 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sleeping .
+
+:sighting_a-02-14 a :Sighting ;
+    :sightingId "A-02-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846332 ;
+    :longitude -73.940369 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-15 a :Sighting ;
+    :sightingId "A-02-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846458 ;
+    :longitude -73.94103 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-16 a :Sighting ;
+    :sightingId "A-02-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846417 ;
+    :longitude -73.941115 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_a-02-17 a :Sighting ;
+    :sightingId "A-02-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846296 ;
+    :longitude -73.941132 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-02-18 a :Sighting ;
+    :sightingId "A-02-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846064 ;
+    :longitude -73.941497 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-19 a :Sighting ;
+    :sightingId "A-02-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.846065 ;
+    :longitude -73.941498 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-02-20 a :Sighting ;
+    :sightingId "A-02-20" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.847296 ;
+    :longitude -73.942061 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-21 a :Sighting ;
+    :sightingId "A-02-21" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.847259 ;
+    :longitude -73.941598 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-22 a :Sighting ;
+    :sightingId "A-02-22" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.84719 ;
+    :longitude -73.941308 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-02-23 a :Sighting ;
+    :sightingId "A-02-23" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.84719 ;
+    :longitude -73.941308 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_a-02-24 a :Sighting ;
+    :sightingId "A-02-24" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.847113 ;
+    :longitude -73.940937 ;
+    :inPark :park_j_hood_wright_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting .
+
+:sighting_a-03-01 a :Sighting ;
+    :sightingId "A-03-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841178 ;
+    :longitude -73.935482 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-03-02 a :Sighting ;
+    :sightingId "A-03-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841204 ;
+    :longitude -73.935434 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-03-03 a :Sighting ;
+    :sightingId "A-03-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841212 ;
+    :longitude -73.934827 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running .
+
+:sighting_a-03-04 a :Sighting ;
+    :sightingId "A-03-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841217 ;
+    :longitude -73.934714 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-03-05 a :Sighting ;
+    :sightingId "A-03-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841359 ;
+    :longitude -73.934339 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-03-06 a :Sighting ;
+    :sightingId "A-03-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841375 ;
+    :longitude -73.934242 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running .
+
+:sighting_a-03-07 a :Sighting ;
+    :sightingId "A-03-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.841375 ;
+    :longitude -73.934242 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running .
+
+:sighting_a-03-08 a :Sighting ;
+    :sightingId "A-03-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842308 ;
+    :longitude -73.933061 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-03-10 a :Sighting ;
+    :sightingId "A-03-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842511 ;
+    :longitude -73.932916 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-03-11 a :Sighting ;
+    :sightingId "A-03-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842673 ;
+    :longitude -73.932793 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_vocalization_at_us .
+
+:sighting_a-03-12 a :Sighting ;
+    :sightingId "A-03-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842795 ;
+    :longitude -73.933002 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-03-14 a :Sighting ;
+    :sightingId "A-03-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842327 ;
+    :longitude -73.934269 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating .
+
+:sighting_a-03-15 a :Sighting ;
+    :sightingId "A-03-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842359 ;
+    :longitude -73.934177 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_jumped_to_building .
+
+:sighting_a-03-16 a :Sighting ;
+    :sightingId "A-03-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.842769 ;
+    :longitude -73.934478 ;
+    :inPark :park_highbridge_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-01 a :Sighting ;
+    :sightingId "A-04-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817593 ;
+    :longitude -73.948855 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-04-02 a :Sighting ;
+    :sightingId "A-04-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817719 ;
+    :longitude -73.948855 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-03 a :Sighting ;
+    :sightingId "A-04-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817719 ;
+    :longitude -73.948914 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_a-04-04 a :Sighting ;
+    :sightingId "A-04-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817711 ;
+    :longitude -73.949118 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-05 a :Sighting ;
+    :sightingId "A-04-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817569 ;
+    :longitude -73.948931 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-04-06 a :Sighting ;
+    :sightingId "A-04-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817544 ;
+    :longitude -73.949016 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-04-07 a :Sighting ;
+    :sightingId "A-04-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817544 ;
+    :longitude -73.949016 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-04-08 a :Sighting ;
+    :sightingId "A-04-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.817479 ;
+    :longitude -73.949006 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-04-09 a :Sighting ;
+    :sightingId "A-04-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.816685 ;
+    :longitude -73.949689 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-10 a :Sighting ;
+    :sightingId "A-04-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.816677 ;
+    :longitude -73.949549 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-11 a :Sighting ;
+    :sightingId "A-04-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.816555 ;
+    :longitude -73.949609 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-12 a :Sighting ;
+    :sightingId "A-04-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.816506 ;
+    :longitude -73.949587 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-13 a :Sighting ;
+    :sightingId "A-04-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.816425 ;
+    :longitude -73.949474 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-04-14 a :Sighting ;
+    :sightingId "A-04-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.818308 ;
+    :longitude -73.948952 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-04-15 a :Sighting ;
+    :sightingId "A-04-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.818263 ;
+    :longitude -73.948909 ;
+    :inPark :park_st_nicholas_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_a-06-01 a :Sighting ;
+    :sightingId "A-06-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804912 ;
+    :longitude -73.943735 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-02 a :Sighting ;
+    :sightingId "A-06-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804912 ;
+    :longitude -73.943736 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-03 a :Sighting ;
+    :sightingId "A-06-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804913 ;
+    :longitude -73.943735 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-04 a :Sighting ;
+    :sightingId "A-06-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804915 ;
+    :longitude -73.943737 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-05 a :Sighting ;
+    :sightingId "A-06-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804916 ;
+    :longitude -73.943735 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-06 a :Sighting ;
+    :sightingId "A-06-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804914 ;
+    :longitude -73.943736 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-07 a :Sighting ;
+    :sightingId "A-06-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804917 ;
+    :longitude -73.943737 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-08 a :Sighting ;
+    :sightingId "A-06-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804912 ;
+    :longitude -73.943738 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-09 a :Sighting ;
+    :sightingId "A-06-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804701 ;
+    :longitude -73.944118 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-10 a :Sighting ;
+    :sightingId "A-06-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804746 ;
+    :longitude -73.94374 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-11 a :Sighting ;
+    :sightingId "A-06-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804912 ;
+    :longitude -73.94408 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-12 a :Sighting ;
+    :sightingId "A-06-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804729 ;
+    :longitude -73.944053 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-13 a :Sighting ;
+    :sightingId "A-06-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804713 ;
+    :longitude -73.944032 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-14 a :Sighting ;
+    :sightingId "A-06-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804613 ;
+    :longitude -73.943829 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-15 a :Sighting ;
+    :sightingId "A-06-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804564 ;
+    :longitude -73.943824 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-16 a :Sighting ;
+    :sightingId "A-06-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804253 ;
+    :longitude -73.944121 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-06-17 a :Sighting ;
+    :sightingId "A-06-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803758 ;
+    :longitude -73.94433 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_a-06-18 a :Sighting ;
+    :sightingId "A-06-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803616 ;
+    :longitude -73.944464 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-19 a :Sighting ;
+    :sightingId "A-06-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803413 ;
+    :longitude -73.944207 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-20 a :Sighting ;
+    :sightingId "A-06-20" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.80338 ;
+    :longitude -73.944148 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-21 a :Sighting ;
+    :sightingId "A-06-21" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803392 ;
+    :longitude -73.944228 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-22 a :Sighting ;
+    :sightingId "A-06-22" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803794 ;
+    :longitude -73.944003 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-23 a :Sighting ;
+    :sightingId "A-06-23" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803795 ;
+    :longitude -73.944003 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-24 a :Sighting ;
+    :sightingId "A-06-24" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803794 ;
+    :longitude -73.944004 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-25 a :Sighting ;
+    :sightingId "A-06-25" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803794 ;
+    :longitude -73.944005 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-26 a :Sighting ;
+    :sightingId "A-06-26" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803796 ;
+    :longitude -73.944003 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-27 a :Sighting ;
+    :sightingId "A-06-27" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803795 ;
+    :longitude -73.944004 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_defending_tree ;
+    :hasActivity :activity_shouting .
+
+:sighting_a-06-28 a :Sighting ;
+    :sightingId "A-06-28" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.80362 ;
+    :longitude -73.944067 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_a-06-29 a :Sighting ;
+    :sightingId "A-06-29" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.80352 ;
+    :longitude -73.943629 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-30 a :Sighting ;
+    :sightingId "A-06-30" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803507 ;
+    :longitude -73.943661 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-31 a :Sighting ;
+    :sightingId "A-06-31" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803981 ;
+    :longitude -73.943327 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-32 a :Sighting ;
+    :sightingId "A-06-32" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804123 ;
+    :longitude -73.943402 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_a-06-33 a :Sighting ;
+    :sightingId "A-06-33" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.803981 ;
+    :longitude -73.943273 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_cleaning .
+
+:sighting_a-06-34 a :Sighting ;
+    :sightingId "A-06-34" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.804878 ;
+    :longitude -73.942781 ;
+    :inPark :park_marcus_garvey_park ;
+    :inArea :area_upper_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-07-01 a :Sighting ;
+    :sightingId "B-07-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.74145 ;
+    :longitude -73.987884 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-07-02 a :Sighting ;
+    :sightingId "B-07-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742255 ;
+    :longitude -73.987433 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting .
+
+:sighting_b-07-03 a :Sighting ;
+    :sightingId "B-07-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742556 ;
+    :longitude -73.986971 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-07-04 a :Sighting ;
+    :sightingId "B-07-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742792 ;
+    :longitude -73.987046 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_resting_in_tree .
+
+:sighting_b-07-05 a :Sighting ;
+    :sightingId "B-07-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.74288 ;
+    :longitude -73.987663 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_b-07-06 a :Sighting ;
+    :sightingId "B-07-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742421 ;
+    :longitude -73.98808 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting .
+
+:sighting_b-07-07 a :Sighting ;
+    :sightingId "B-07-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742421 ;
+    :longitude -73.98808 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting .
+
+:sighting_b-07-08 a :Sighting ;
+    :sightingId "B-07-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.742807 ;
+    :longitude -73.988435 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-07-09 a :Sighting ;
+    :sightingId "B-07-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.741528 ;
+    :longitude -73.988324 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-07-10 a :Sighting ;
+    :sightingId "B-07-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.741805 ;
+    :longitude -73.988448 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-07-11 a :Sighting ;
+    :sightingId "B-07-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.741862 ;
+    :longitude -73.988797 ;
+    :inPark :park_madison_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-01 a :Sighting ;
+    :sightingId "B-08-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735981 ;
+    :longitude -73.99062 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-08-02 a :Sighting ;
+    :sightingId "B-08-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735847 ;
+    :longitude -73.990115 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-03 a :Sighting ;
+    :sightingId "B-08-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735896 ;
+    :longitude -73.99041 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-04 a :Sighting ;
+    :sightingId "B-08-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73579 ;
+    :longitude -73.990738 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-05 a :Sighting ;
+    :sightingId "B-08-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735941 ;
+    :longitude -73.99063 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_digging .
+
+:sighting_b-08-06 a :Sighting ;
+    :sightingId "B-08-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73566 ;
+    :longitude -73.990351 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-08-07 a :Sighting ;
+    :sightingId "B-08-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735636 ;
+    :longitude -73.990426 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_b-08-08 a :Sighting ;
+    :sightingId "B-08-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73566 ;
+    :longitude -73.990351 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-08-09 a :Sighting ;
+    :sightingId "B-08-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735587 ;
+    :longitude -73.990367 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_digging .
+
+:sighting_b-08-10 a :Sighting ;
+    :sightingId "B-08-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73542 ;
+    :longitude -73.990453 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-11 a :Sighting ;
+    :sightingId "B-08-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735514 ;
+    :longitude -73.99033 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-12 a :Sighting ;
+    :sightingId "B-08-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735945 ;
+    :longitude -73.990201 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-13 a :Sighting ;
+    :sightingId "B-08-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.735947 ;
+    :longitude -73.99023 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-14 a :Sighting ;
+    :sightingId "B-08-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73604 ;
+    :longitude -73.98966 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-15 a :Sighting ;
+    :sightingId "B-08-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73618 ;
+    :longitude -73.990683 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-08-16 a :Sighting ;
+    :sightingId "B-08-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.736298 ;
+    :longitude -73.990559 ;
+    :inPark :park_union_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-01 a :Sighting ;
+    :sightingId "B-09-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733753 ;
+    :longitude -73.983682 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-02 a :Sighting ;
+    :sightingId "B-09-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733648 ;
+    :longitude -73.983483 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-03 a :Sighting ;
+    :sightingId "B-09-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733631 ;
+    :longitude -73.983419 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-04 a :Sighting ;
+    :sightingId "B-09-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733546 ;
+    :longitude -73.983263 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-09-05 a :Sighting ;
+    :sightingId "B-09-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733591 ;
+    :longitude -73.983263 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-09-06 a :Sighting ;
+    :sightingId "B-09-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733648 ;
+    :longitude -73.984294 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_b-09-07 a :Sighting ;
+    :sightingId "B-09-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733737 ;
+    :longitude -73.98438 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-08 a :Sighting ;
+    :sightingId "B-09-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733501 ;
+    :longitude -73.984417 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-09-09 a :Sighting ;
+    :sightingId "B-09-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733575 ;
+    :longitude -73.984391 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-09-10 a :Sighting ;
+    :sightingId "B-09-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733506 ;
+    :longitude -73.984553 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-11 a :Sighting ;
+    :sightingId "B-09-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733619 ;
+    :longitude -73.984708 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-09-12 a :Sighting ;
+    :sightingId "B-09-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733648 ;
+    :longitude -73.984638 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-09-13 a :Sighting ;
+    :sightingId "B-09-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733737 ;
+    :longitude -73.984644 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_b-09-14 a :Sighting ;
+    :sightingId "B-09-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.733932 ;
+    :longitude -73.984612 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_b-09-15 a :Sighting ;
+    :sightingId "B-09-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734014 ;
+    :longitude -73.984461 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_b-09-17 a :Sighting ;
+    :sightingId "B-09-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734083 ;
+    :longitude -73.984322 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_b-09-18 a :Sighting ;
+    :sightingId "B-09-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.73403 ;
+    :longitude -73.984199 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-19 a :Sighting ;
+    :sightingId "B-09-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734204 ;
+    :longitude -73.984242 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_grooming .
+
+:sighting_b-09-20 a :Sighting ;
+    :sightingId "B-09-20" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734314 ;
+    :longitude -73.984231 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-23 a :Sighting ;
+    :sightingId "B-09-23" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734335 ;
+    :longitude -73.984038 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-24 a :Sighting ;
+    :sightingId "B-09-24" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734383 ;
+    :longitude -73.984118 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-09-25 a :Sighting ;
+    :sightingId "B-09-25" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.734356 ;
+    :longitude -73.984062 ;
+    :inPark :park_stuyvesant_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-01 a :Sighting ;
+    :sightingId "B-10-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.730703 ;
+    :longitude -73.995821 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-02 a :Sighting ;
+    :sightingId "B-10-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.730638 ;
+    :longitude -73.995784 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-03 a :Sighting ;
+    :sightingId "B-10-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.730528 ;
+    :longitude -73.995891 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-04 a :Sighting ;
+    :sightingId "B-10-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.730394 ;
+    :longitude -73.996009 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-09 a :Sighting ;
+    :sightingId "B-10-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.730223 ;
+    :longitude -73.996132 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-10-15 a :Sighting ;
+    :sightingId "B-10-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.729858 ;
+    :longitude -73.996843 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-10-16 a :Sighting ;
+    :sightingId "B-10-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72985 ;
+    :longitude -73.996778 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-10-17 a :Sighting ;
+    :sightingId "B-10-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.729822 ;
+    :longitude -73.996816 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-10-18 a :Sighting ;
+    :sightingId "B-10-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.729809 ;
+    :longitude -73.996762 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-10-19 a :Sighting ;
+    :sightingId "B-10-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.729939 ;
+    :longitude -73.997068 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_b-10-40 a :Sighting ;
+    :sightingId "B-10-40" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.731974 ;
+    :longitude -73.998482 ;
+    :inPark :park_washington_square_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-01 a :Sighting ;
+    :sightingId "B-12-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725738 ;
+    :longitude -73.972105 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating .
+
+:sighting_b-12-02 a :Sighting ;
+    :sightingId "B-12-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722614 ;
+    :longitude -73.972894 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_black ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating_peanuts_ .
+
+:sighting_b-12-03 a :Sighting ;
+    :sightingId "B-12-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72263 ;
+    :longitude -73.973001 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_watching_2 .
+
+:sighting_b-12-04 a :Sighting ;
+    :sightingId "B-12-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72263 ;
+    :longitude -73.973109 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_eating .
+
+:sighting_b-12-05 a :Sighting ;
+    :sightingId "B-12-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722614 ;
+    :longitude -73.973033 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-06 a :Sighting ;
+    :sightingId "B-12-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722173 ;
+    :longitude -73.97272 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-07 a :Sighting ;
+    :sightingId "B-12-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.719379 ;
+    :longitude -73.973504 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-08 a :Sighting ;
+    :sightingId "B-12-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.71935 ;
+    :longitude -73.973445 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-09 a :Sighting ;
+    :sightingId "B-12-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721923 ;
+    :longitude -73.974121 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_b-12-10 a :Sighting ;
+    :sightingId "B-12-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.724011 ;
+    :longitude -73.97313 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_b-12-11 a :Sighting ;
+    :sightingId "B-12-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.724608 ;
+    :longitude -73.972841 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_b-12-12 a :Sighting ;
+    :sightingId "B-12-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.724774 ;
+    :longitude -73.97275 ;
+    :inPark :park_john_v_lindsay_east_river_park ;
+    :inArea :area_central_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-14-01 a :Sighting ;
+    :sightingId "C-14-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.715415 ;
+    :longitude -73.989567 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-14-02 a :Sighting ;
+    :sightingId "C-14-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.715484 ;
+    :longitude -73.989299 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-14-03 a :Sighting ;
+    :sightingId "C-14-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.714749 ;
+    :longitude -73.989577 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-14-04 a :Sighting ;
+    :sightingId "C-14-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.71468 ;
+    :longitude -73.989776 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-14-05 a :Sighting ;
+    :sightingId "C-14-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.714846 ;
+    :longitude -73.989679 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-14-06 a :Sighting ;
+    :sightingId "C-14-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.715033 ;
+    :longitude -73.989609 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing .
+
+:sighting_c-14-07 a :Sighting ;
+    :sightingId "C-14-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.715208 ;
+    :longitude -73.989534 ;
+    :inPark :park_seward_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing .
+
+:sighting_c-15-01 a :Sighting ;
+    :sightingId "C-15-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712159 ;
+    :longitude -73.979415 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating .
+
+:sighting_c-15-02 a :Sighting ;
+    :sightingId "C-15-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712199 ;
+    :longitude -73.979519 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-15-06 a :Sighting ;
+    :sightingId "C-15-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712224 ;
+    :longitude -73.979669 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_ear_scratching .
+
+:sighting_c-15-08 a :Sighting ;
+    :sightingId "C-15-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711927 ;
+    :longitude -73.979658 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_frolicking .
+
+:sighting_c-15-09 a :Sighting ;
+    :sightingId "C-15-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711866 ;
+    :longitude -73.97976 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_scratching .
+
+:sighting_c-15-10 a :Sighting ;
+    :sightingId "C-15-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.71174 ;
+    :longitude -73.980539 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-15-12 a :Sighting ;
+    :sightingId "C-15-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711316 ;
+    :longitude -73.978343 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_guarding .
+
+:sighting_c-15-13 a :Sighting ;
+    :sightingId "C-15-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711417 ;
+    :longitude 73.977767 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-15-14 a :Sighting ;
+    :sightingId "C-15-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711421 ;
+    :longitude -73.977692 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-15-15 a :Sighting ;
+    :sightingId "C-15-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711409 ;
+    :longitude -73.977719 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_moving ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-15-16 a :Sighting ;
+    :sightingId "C-15-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.711303 ;
+    :longitude -73.97759 ;
+    :inPark :park_corlears_hook_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-16-01 a :Sighting ;
+    :sightingId "C-16-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.714867 ;
+    :longitude -74.000236 ;
+    :inPark :park_columbus_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-16-02 a :Sighting ;
+    :sightingId "C-16-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.7159 ;
+    :longitude -74.000167 ;
+    :inPark :park_columbus_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-16-04 a :Sighting ;
+    :sightingId "C-16-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.715779 ;
+    :longitude -73.999887 ;
+    :inPark :park_columbus_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-18-01 a :Sighting ;
+    :sightingId "C-18-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.716335 ;
+    :longitude -74.015612 ;
+    :inPark :park_teardrop_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_eating_or_pretending_to_eat_ .
+
+:sighting_c-19-01 a :Sighting ;
+    :sightingId "C-19-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712828 ;
+    :longitude -74.005072 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-02 a :Sighting ;
+    :sightingId "C-19-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712938 ;
+    :longitude -74.005152 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-19-03 a :Sighting ;
+    :sightingId "C-19-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712938 ;
+    :longitude -74.005152 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_c-19-04 a :Sighting ;
+    :sightingId "C-19-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712893 ;
+    :longitude -74.005233 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_burying .
+
+:sighting_c-19-05 a :Sighting ;
+    :sightingId "C-19-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712893 ;
+    :longitude -74.005233 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_burying .
+
+:sighting_c-19-06 a :Sighting ;
+    :sightingId "C-19-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712922 ;
+    :longitude -74.005147 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-19-07 a :Sighting ;
+    :sightingId "C-19-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712922 ;
+    :longitude -74.005147 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-19-08 a :Sighting ;
+    :sightingId "C-19-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.713044 ;
+    :longitude -74.005404 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-19-09 a :Sighting ;
+    :sightingId "C-19-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712836 ;
+    :longitude -74.005662 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-10 a :Sighting ;
+    :sightingId "C-19-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712881 ;
+    :longitude -74.005823 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_c-19-11 a :Sighting ;
+    :sightingId "C-19-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712995 ;
+    :longitude -74.005963 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-12 a :Sighting ;
+    :sightingId "C-19-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.713044 ;
+    :longitude -74.006242 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_very_carefully_watching_a_cat .
+
+:sighting_c-19-13 a :Sighting ;
+    :sightingId "C-19-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.713276 ;
+    :longitude -74.006323 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chattering .
+
+:sighting_c-19-14 a :Sighting ;
+    :sightingId "C-19-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.713339 ;
+    :longitude -74.006313 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating_nuts_ ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-15 a :Sighting ;
+    :sightingId "C-19-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.713518 ;
+    :longitude -74.006308 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_c-19-16 a :Sighting ;
+    :sightingId "C-19-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.71312 ;
+    :longitude -74.006862 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-17 a :Sighting ;
+    :sightingId "C-19-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712872 ;
+    :longitude -74.006878 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-19-18 a :Sighting ;
+    :sightingId "C-19-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.712872 ;
+    :longitude -74.006878 ;
+    :inPark :park_city_hall_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-20-06 a :Sighting ;
+    :sightingId "C-20-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.703882 ;
+    :longitude -74.015955 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chillin_ ;
+    :hasActivity :activity_rubbing_butt_on_ground .
+
+:sighting_c-20-07 a :Sighting ;
+    :sightingId "C-20-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704211 ;
+    :longitude -74.015859 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_c-20-08 a :Sighting ;
+    :sightingId "C-20-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704142 ;
+    :longitude -74.015837 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-20-09 a :Sighting ;
+    :sightingId "C-20-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704175 ;
+    :longitude -74.015306 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-20-10 a :Sighting ;
+    :sightingId "C-20-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704171 ;
+    :longitude -74.015242 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_c-20-11 a :Sighting ;
+    :sightingId "C-20-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704468 ;
+    :longitude -74.014774 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-20-12 a :Sighting ;
+    :sightingId "C-20-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704453 ;
+    :longitude -74.014757 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_c-20-13 a :Sighting ;
+    :sightingId "C-20-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.70442 ;
+    :longitude -74.014741 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_c-20-14 a :Sighting ;
+    :sightingId "C-20-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.704188 ;
+    :longitude -74.014853 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sticking_out_of_a_tree .
+
+:sighting_c-20-15 a :Sighting ;
+    :sightingId "C-20-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.70352 ;
+    :longitude -74.015273 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_c-20-16 a :Sighting ;
+    :sightingId "C-20-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.703487 ;
+    :longitude -74.015278 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_chasing .
+
+:sighting_c-20-17 a :Sighting ;
+    :sightingId "C-20-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.703989 ;
+    :longitude -74.015202 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_hangin_with_13_14 .
+
+:sighting_c-20-19 a :Sighting ;
+    :sightingId "C-20-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.70295 ;
+    :longitude -74.015813 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing_tree_ .
+
+:sighting_c-20-21 a :Sighting ;
+    :sightingId "C-20-21" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.702922 ;
+    :longitude -74.016629 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_snacking_in_a_tree .
+
+:sighting_c-20-23 a :Sighting ;
+    :sightingId "C-20-23" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.702313 ;
+    :longitude -74.015644 ;
+    :inPark :park_battery_park ;
+    :inArea :area_lower_manhattan ;
+    :hasFurColor :fur_gray ;
+    :hasActivity :activity_prancing_about .
+
+:sighting_d-21-01 a :Sighting ;
+    :sightingId "D-21-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725308 ;
+    :longitude -73.942789 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_battery .
+
+:sighting_d-21-02 a :Sighting ;
+    :sightingId "D-21-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725511 ;
+    :longitude -73.943609 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_foraging ;
+    :hasActivity :activity_self-cleaning .
+
+:sighting_d-21-03 a :Sighting ;
+    :sightingId "D-21-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725511 ;
+    :longitude -73.943448 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chasing .
+
+:sighting_d-21-04 a :Sighting ;
+    :sightingId "D-21-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725478 ;
+    :longitude -73.944113 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-21-05 a :Sighting ;
+    :sightingId "D-21-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725527 ;
+    :longitude -73.943974 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_d-21-06 a :Sighting ;
+    :sightingId "D-21-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725397 ;
+    :longitude -73.944124 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_d-21-07 a :Sighting ;
+    :sightingId "D-21-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725413 ;
+    :longitude -73.943984 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-21-08 a :Sighting ;
+    :sightingId "D-21-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.724755 ;
+    :longitude -73.944006 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing_down_ .
+
+:sighting_d-21-09 a :Sighting ;
+    :sightingId "D-21-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.723974 ;
+    :longitude -73.943845 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing_down_ .
+
+:sighting_d-21-10 a :Sighting ;
+    :sightingId "D-21-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.723462 ;
+    :longitude -73.943952 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing_down_ .
+
+:sighting_d-21-11 a :Sighting ;
+    :sightingId "D-21-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725372 ;
+    :longitude -73.943652 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_climbing_down_ .
+
+:sighting_d-21-12 a :Sighting ;
+    :sightingId "D-21-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725364 ;
+    :longitude -73.943512 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sitting .
+
+:sighting_d-21-13 a :Sighting ;
+    :sightingId "D-21-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725397 ;
+    :longitude -73.943297 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-21-14 a :Sighting ;
+    :sightingId "D-21-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.725197 ;
+    :longitude -73.943273 ;
+    :inPark :park_msgr_mcgolrick_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-01 a :Sighting ;
+    :sightingId "D-22-01" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72167 ;
+    :longitude -73.953364 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_d-22-02 a :Sighting ;
+    :sightingId "D-22-02" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721768 ;
+    :longitude -73.953192 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_d-22-03 a :Sighting ;
+    :sightingId "D-22-03" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721662 ;
+    :longitude -73.953278 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-04 a :Sighting ;
+    :sightingId "D-22-04" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721857 ;
+    :longitude -73.953139 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-05 a :Sighting ;
+    :sightingId "D-22-05" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721941 ;
+    :longitude -73.952947 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-06 a :Sighting ;
+    :sightingId "D-22-06" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722039 ;
+    :longitude -73.952796 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-07 a :Sighting ;
+    :sightingId "D-22-07" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72147 ;
+    :longitude -73.952857 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_chasing .
+
+:sighting_d-22-08 a :Sighting ;
+    :sightingId "D-22-08" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721713 ;
+    :longitude -73.95305 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-09 a :Sighting ;
+    :sightingId "D-22-09" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721933 ;
+    :longitude -73.953147 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-10 a :Sighting ;
+    :sightingId "D-22-10" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722283 ;
+    :longitude -73.953115 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-11 a :Sighting ;
+    :sightingId "D-22-11" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722698 ;
+    :longitude -73.953198 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-12 a :Sighting ;
+    :sightingId "D-22-12" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722819 ;
+    :longitude -73.952095 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-13 a :Sighting ;
+    :sightingId "D-22-13" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722966 ;
+    :longitude -73.951987 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-14 a :Sighting ;
+    :sightingId "D-22-14" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.723136 ;
+    :longitude -73.951794 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing ;
+    :hasActivity :activity_sitting_in_short_tree .
+
+:sighting_d-22-15 a :Sighting ;
+    :sightingId "D-22-15" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.723071 ;
+    :longitude -73.951697 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_eating .
+
+:sighting_d-22-16 a :Sighting ;
+    :sightingId "D-22-16" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.723006 ;
+    :longitude -73.951655 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging ;
+    :hasActivity :activity_jumping .
+
+:sighting_d-22-17 a :Sighting ;
+    :sightingId "D-22-17" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722962 ;
+    :longitude -73.951752 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chilling .
+
+:sighting_d-22-18 a :Sighting ;
+    :sightingId "D-22-18" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.722603 ;
+    :longitude -73.951449 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_hanging .
+
+:sighting_d-22-19 a :Sighting ;
+    :sightingId "D-22-19" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721247 ;
+    :longitude -73.951609 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-20 a :Sighting ;
+    :sightingId "D-22-20" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720606 ;
+    :longitude -73.952769 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-21 a :Sighting ;
+    :sightingId "D-22-21" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720582 ;
+    :longitude -73.952694 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-22 a :Sighting ;
+    :sightingId "D-22-22" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720533 ;
+    :longitude -73.95272 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-23 a :Sighting ;
+    :sightingId "D-22-23" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720488 ;
+    :longitude -73.952806 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-24 a :Sighting ;
+    :sightingId "D-22-24" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720458 ;
+    :longitude -73.954244 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-25 a :Sighting ;
+    :sightingId "D-22-25" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720018 ;
+    :longitude -73.953442 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-26 a :Sighting ;
+    :sightingId "D-22-26" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720026 ;
+    :longitude -73.953652 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-27 a :Sighting ;
+    :sightingId "D-22-27" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.719777 ;
+    :longitude -73.952774 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating_bread_crumbs_ ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-28 a :Sighting ;
+    :sightingId "D-22-28" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720114 ;
+    :longitude -73.952768 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-29 a :Sighting ;
+    :sightingId "D-22-29" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.719944 ;
+    :longitude -73.952505 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_hanging_out .
+
+:sighting_d-22-30 a :Sighting ;
+    :sightingId "D-22-30" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720448 ;
+    :longitude -73.952521 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-31 a :Sighting ;
+    :sightingId "D-22-31" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720412 ;
+    :longitude -73.952353 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-32 a :Sighting ;
+    :sightingId "D-22-32" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720372 ;
+    :longitude -73.952326 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-33 a :Sighting ;
+    :sightingId "D-22-33" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.720749 ;
+    :longitude -73.951891 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-34 a :Sighting ;
+    :sightingId "D-22-34" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721181 ;
+    :longitude -73.951255 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sleeping_dead_ .
+
+:sighting_d-22-35 a :Sighting ;
+    :sightingId "D-22-35" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721181 ;
+    :longitude -73.951255 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_sleeping_dead_ .
+
+:sighting_d-22-36 a :Sighting ;
+    :sightingId "D-22-36" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.72112 ;
+    :longitude -73.95104 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating_tortilla_chip_ .
+
+:sighting_d-22-37 a :Sighting ;
+    :sightingId "D-22-37" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721315 ;
+    :longitude -73.950943 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_running .
+
+:sighting_d-22-38 a :Sighting ;
+    :sightingId "D-22-38" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721258 ;
+    :longitude -73.950799 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_d-22-39 a :Sighting ;
+    :sightingId "D-22-39" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721217 ;
+    :longitude -73.95077 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_eating .
+
+:sighting_d-22-40 a :Sighting ;
+    :sightingId "D-22-40" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721173 ;
+    :longitude -73.950781 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-41 a :Sighting ;
+    :sightingId "D-22-41" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721161 ;
+    :longitude -73.950732 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_cinnamon ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_foraging .
+
+:sighting_d-22-42 a :Sighting ;
+    :sightingId "D-22-42" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721124 ;
+    :longitude -73.950797 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-43 a :Sighting ;
+    :sightingId "D-22-43" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.721026 ;
+    :longitude -73.950765 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_above_ground ;
+    :hasActivity :activity_running ;
+    :hasActivity :activity_chasing ;
+    :hasActivity :activity_climbing .
+
+:sighting_d-22-44 a :Sighting ;
+    :sightingId "D-22-44" ;
+    :observedOn "2020-03-01"^^xsd:date ;
+    :latitude 40.719376 ;
+    :longitude -73.952326 ;
+    :inPark :park_mccarren_park ;
+    :inArea :area_brooklyn ;
+    :hasFurColor :fur_gray ;
+    :hasPerch :perch_ground_plane ;
+    :hasActivity :activity_foraging .
+

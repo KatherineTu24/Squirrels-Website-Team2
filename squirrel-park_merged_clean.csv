@@ -1,0 +1,284 @@
+﻿area_name,area_id,park_name,park_id,squirrel_id,fur_color,location,activities,lat,lon,date
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-01,Gray,Ground Plane,Foraging,40.85941,-73.933936,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-02,Gray,Ground Plane,Foraging,40.859436,-73.933937,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-03,Gray,Ground Plane,"Eating, Digging something",40.859416,-73.933894,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-04,Gray,Ground Plane,Running,40.859418,-73.933895,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-05,Gray,Ground Plane,"Running, Eating",40.859493,-73.93359,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-06,Gray,Ground Plane,Climbing,40.860825,-73.932871,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-07,Gray,Ground Plane,Foraging,40.860225,-73.933143,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-08,Black,Above Ground,Climbing,40.859965,-73.933412,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-09,Gray,Ground Plane,Foraging,40.859892,-73.933326,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-10,Gray,Ground Plane,"Eating, Digging",40.859636,-73.933717,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-11,Gray,Ground Plane,"Eating, Digging",40.859576,-73.933738,3/1/20
+UPPER MANHATTAN,A,Fort Tryon Park,1,A-01-12,Gray,Ground Plane,Running,40.859989,-73.934544,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-01,Gray,Ground Plane,Running,40.845749,-73.9407,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-02,Gray,Above Ground,Foraging,40.845875,-73.940808,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-03,Gray,Ground Plane,Foraging,40.845875,-73.940808,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-04,Gray,Ground Plane,Running,40.846088,-73.940613,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-05,Gray,Ground Plane,Running,40.846088,-73.940613,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-06,Gray,Ground Plane,Foraging,40.846088,-73.940613,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-08,Gray,Ground Plane,"Foraging, Nesting/gathering leaves",40.846222,-73.94094,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-09,Gray,Ground Plane,Chasing,40.846197,-73.941026,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-10,Gray,Ground Plane,Running,40.846185,-73.940613,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-11,Gray,Ground Plane,Eating,40.846271,-73.940579,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-12,Gray,Above Ground,Climbing,40.846332,-73.940369,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-13,Gray,Above Ground,Sleeping,40.846332,-73.940369,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-14,Gray,Ground Plane,Running,40.846332,-73.940369,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-15,Gray,Ground Plane,Running,40.846458,-73.94103,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-16,Gray,Above Ground,Eating,40.846417,-73.941115,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-17,Gray,Ground Plane,Running,40.846296,-73.941132,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-18,Gray,Ground Plane,Foraging,40.846064,-73.941497,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-19,Gray,Above Ground,Climbing,40.846065,-73.941498,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-20,Gray,Ground Plane,Foraging,40.847296,-73.942061,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-21,Gray,Ground Plane,Foraging,40.847259,-73.941598,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-22,Gray,Ground Plane,Foraging,40.84719,-73.941308,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-23,Gray,Above Ground,Eating,40.84719,-73.941308,3/1/20
+UPPER MANHATTAN,A,J. Hood Wright Park,2,A-02-24,Cinnamon,Above Ground,Sitting,40.847113,-73.940937,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-01,Gray,Above Ground,"Chasing, Climbing",40.841178,-73.935482,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-02,Gray,Above Ground,"Chasing, Climbing, Eating",40.841204,-73.935434,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-03,Gray,Above Ground,Running,40.841212,-73.934827,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-04,Gray,Above Ground,Climbing,40.841217,-73.934714,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-05,Gray,Ground Plane,Running,40.841359,-73.934339,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-06,Gray,Above Ground,Running,40.841375,-73.934242,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-07,Gray,Above Ground,Running,40.841375,-73.934242,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-08,Gray,Above Ground,"Running, Chasing, Climbing",40.842308,-73.933061,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-10,Gray,Moving,"Climbing, Foraging",40.842511,-73.932916,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-11,Gray,Above Ground,Vocalization at us,40.842673,-73.932793,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-12,Gray,Ground Plane,"Running, Foraging",40.842795,-73.933002,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-14,Gray,Ground Plane,"Running, Eating",40.842327,-73.934269,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-15,Gray,Above Ground,Jumped to building,40.842359,-73.934177,3/1/20
+UPPER MANHATTAN,A,Highbridge Park,3,A-03-16,Gray,Ground Plane,"Eating, Foraging",40.842769,-73.934478,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-01,Gray,Above Ground,Climbing,40.817593,-73.948855,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-02,Black,Ground Plane,Foraging,40.817719,-73.948855,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-03,Gray,Ground Plane,Eating,40.817719,-73.948914,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-04,Gray,Ground Plane,Foraging,40.817711,-73.949118,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-05,Gray,Ground Plane,"Climbing, Eating",40.817569,-73.948931,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-06,Gray,Above Ground,"Chasing, Climbing",40.817544,-73.949016,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-07,Gray,Above Ground,"Chasing, Climbing",40.817544,-73.949016,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-08,Gray,Ground Plane,Running,40.817479,-73.949006,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-09,Gray,Ground Plane,Foraging,40.816685,-73.949689,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-10,Gray,Ground Plane,Foraging,40.816677,-73.949549,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-11,Black,Ground Plane,Foraging,40.816555,-73.949609,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-12,Gray,Ground Plane,Foraging,40.816506,-73.949587,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-13,Gray,Ground Plane,Running,40.816425,-73.949474,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-14,Gray,Ground Plane,Foraging,40.818308,-73.948952,3/1/20
+UPPER MANHATTAN,A,St. Nicholas Park,4,A-04-15,Gray,Ground Plane,Foraging,40.818263,-73.948909,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-01,Gray,Above Ground,Climbing,40.804912,-73.943735,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-02,Gray,Above Ground,Climbing,40.804912,-73.943736,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-03,Gray,Above Ground,Climbing,40.804913,-73.943735,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-04,Gray,Above Ground,Climbing,40.804915,-73.943737,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-05,Gray,Above Ground,Climbing,40.804916,-73.943735,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-06,Gray,Above Ground,Climbing,40.804914,-73.943736,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-07,Gray,Above Ground,Climbing,40.804917,-73.943737,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-08,Black,Above Ground,Climbing,40.804912,-73.943738,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-09,Gray,Above Ground,"Chasing, Climbing, Eating",40.804701,-73.944118,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-10,Gray,Above Ground,"Chasing, Climbing, Eating",40.804746,-73.94374,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-11,Gray,Above Ground,"Chasing, Climbing, Eating",40.804912,-73.94408,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-12,Gray,Above Ground,"Chasing, Climbing, Eating",40.804729,-73.944053,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-13,Gray,Above Ground,Climbing,40.804713,-73.944032,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-14,Gray,Above Ground,"Climbing, Eating",40.804613,-73.943829,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-15,Gray,Above Ground,"Climbing, Eating",40.804564,-73.943824,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-16,Gray,Ground Plane,Running,40.804253,-73.944121,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-17,Gray,Ground Plane,Running,40.803758,-73.94433,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-18,Gray,Above Ground,"Sitting, shouting",40.803616,-73.944464,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-19,Gray,Above Ground,"Sitting, shouting",40.803413,-73.944207,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-20,Gray,Above Ground,"Sitting, shouting",40.80338,-73.944148,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-21,Gray,Above Ground,"Sitting, shouting",40.803392,-73.944228,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-22,Gray,Above Ground,"Defending tree, shouting",40.803794,-73.944003,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-23,Gray,Above Ground,"Defending tree, shouting",40.803795,-73.944003,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-24,Gray,Above Ground,"Defending tree, shouting",40.803794,-73.944004,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-25,Gray,Above Ground,"Defending tree, shouting",40.803794,-73.944005,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-26,Gray,Above Ground,"Defending tree, shouting",40.803796,-73.944003,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-27,Gray,Above Ground,"Defending tree, shouting",40.803795,-73.944004,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-28,Gray,Above Ground,Eating,40.80362,-73.944067,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-29,Gray,Above Ground,"Chasing, Climbing",40.80352,-73.943629,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-30,Gray,Above Ground,"Chasing, Climbing",40.803507,-73.943661,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-31,Gray,Above Ground,Climbing,40.803981,-73.943327,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-32,Gray,Above Ground,Climbing,40.804123,-73.943402,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-33,Black,Above Ground,Cleaning,40.803981,-73.943273,3/1/20
+UPPER MANHATTAN,A,Marcus Garvey Park,6,A-06-34,Gray,Above Ground,Climbing,40.804878,-73.942781,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-01,Gray,Ground Plane,Foraging,40.74145,-73.987884,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-02,Gray,Above Ground,Sitting,40.742255,-73.987433,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-03,Gray,Ground Plane,Foraging,40.742556,-73.986971,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-04,Gray,Above Ground,Resting in tree,40.742792,-73.987046,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-05,Gray,Ground Plane,Running,40.74288,-73.987663,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-06,Gray,Above Ground,Sitting,40.742421,-73.98808,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-07,Gray,Above Ground,Sitting,40.742421,-73.98808,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-08,Gray,Ground Plane,Foraging,40.742807,-73.988435,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-09,Gray,Ground Plane,Foraging,40.741528,-73.988324,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-10,Gray,Above Ground,"Climbing, Foraging",40.741805,-73.988448,3/1/20
+CENTRAL MANHATTAN,B,Madison Square Park,7,B-07-11,Gray,Moving,"Running, Climbing, Foraging",40.741862,-73.988797,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-01,Cinnamon,Ground Plane,Climbing,40.735981,-73.99062,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-02,Gray,Ground Plane,"Running, Eating, Foraging",40.735847,-73.990115,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-03,Cinnamon,Ground Plane,Foraging,40.735896,-73.99041,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-04,Gray,Ground Plane,Foraging,40.73579,-73.990738,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-05,Gray,Ground Plane,Digging,40.735941,-73.99063,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-06,Gray,Above Ground,Climbing,40.73566,-73.990351,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-07,Gray,Above Ground,"Climbing, Eating",40.735636,-73.990426,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-08,Gray,,Climbing,40.73566,-73.990351,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-09,Gray,,"Running, Digging",40.735587,-73.990367,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-10,Gray,Ground Plane,"Eating, Foraging",40.73542,-73.990453,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-11,Cinnamon,Ground Plane,Foraging,40.735514,-73.99033,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-12,Gray,Ground Plane,"Eating, Foraging",40.735945,-73.990201,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-13,Cinnamon,,Foraging,40.735947,-73.99023,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-14,Gray,Ground Plane,"Eating, Foraging",40.73604,-73.98966,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-15,Gray,Ground Plane,"Eating, Foraging",40.73618,-73.990683,3/1/20
+CENTRAL MANHATTAN,B,Union Square Park,8,B-08-16,Cinnamon,Ground Plane,"Eating, Foraging",40.736298,-73.990559,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-01,Gray,Ground Plane,Foraging,40.733753,-73.983682,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-02,Gray,Ground Plane,Foraging,40.733648,-73.983483,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-03,Gray,Ground Plane,Foraging,40.733631,-73.983419,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-04,Gray,Ground Plane,Climbing,40.733546,-73.983263,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-05,Gray,Above Ground,Climbing,40.733591,-73.983263,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-06,Gray,Above Ground,"Climbing, Eating",40.733648,-73.984294,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-07,Gray,Ground Plane,Foraging,40.733737,-73.98438,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-08,Gray,Ground Plane,Chasing,40.733501,-73.984417,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-09,Gray,Ground Plane,Chasing,40.733575,-73.984391,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-10,Gray,Ground Plane,Foraging,40.733506,-73.984553,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-11,Gray,Above Ground,Climbing,40.733619,-73.984708,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-12,Gray,Above Ground,Chasing,40.733648,-73.984638,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-13,Gray,Above Ground,Eating,40.733737,-73.984644,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-14,Black,Above Ground,Eating,40.733932,-73.984612,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-15,Black,Above Ground,Eating,40.734014,-73.984461,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-17,Gray,Above Ground,Eating,40.734083,-73.984322,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-18,Gray,Ground Plane,Foraging,40.73403,-73.984199,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-19,Black,Above Ground,Grooming,40.734204,-73.984242,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-20,Gray,Ground Plane,Foraging,40.734314,-73.984231,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-23,Gray,Ground Plane,Foraging,40.734335,-73.984038,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-24,Black,Ground Plane,Foraging,40.734383,-73.984118,3/1/20
+CENTRAL MANHATTAN,B,Stuyvesant Square Park,9,B-09-25,Black,Ground Plane,Foraging,40.734356,-73.984062,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-01,Gray,Ground Plane,Foraging,40.730703,-73.995821,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-02,Gray,Ground Plane,Foraging,40.730638,-73.995784,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-03,Gray,Ground Plane,Foraging,40.730528,-73.995891,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-04,Gray,Ground Plane,Foraging,40.730394,-73.996009,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-09,Gray,Ground Plane,Foraging,40.730223,-73.996132,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-15,Gray,,Chasing,40.729858,-73.996843,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-16,Gray,,Chasing,40.72985,-73.996778,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-17,Gray,,Chasing,40.729822,-73.996816,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-18,Gray,,Chasing,40.729809,-73.996762,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-19,Gray,,Chasing,40.729939,-73.997068,3/1/20
+CENTRAL MANHATTAN,B,Washington Square Park,10,B-10-40,Gray,Ground Plane,Foraging,40.731974,-73.998482,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-01,Gray,Ground Plane,"Running, Eating",40.725738,-73.972105,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-02,Black,Ground Plane,"Running, Eating (peanuts)",40.722614,-73.972894,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-03,Gray,Moving,"Climbing, Watching #2",40.72263,-73.973001,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-04,Gray,Moving,"Running, Chasing, Eating",40.72263,-73.973109,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-05,Gray,Ground Plane,"Eating, Foraging",40.722614,-73.973033,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-06,Gray,Ground Plane,"Eating, Foraging",40.722173,-73.97272,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-07,Gray,Moving,"Climbing, Foraging",40.719379,-73.973504,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-08,Gray,Moving,"Climbing, Foraging",40.71935,-73.973445,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-09,Gray,Above Ground,Climbing,40.721923,-73.974121,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-10,Gray,Ground Plane,Eating,40.724011,-73.97313,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-11,Gray,Ground Plane,"Climbing, Eating, Foraging",40.724608,-73.972841,3/1/20
+CENTRAL MANHATTAN,B,John V. Lindsay East River Park,12,B-12-12,Gray,Ground Plane,"Eating, Foraging",40.724774,-73.97275,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-01,Gray,Ground Plane,Eating,40.715415,-73.989567,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-02,Gray,Ground Plane,Eating,40.715484,-73.989299,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-03,Gray,Ground Plane,Foraging,40.714749,-73.989577,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-04,Gray,Ground Plane,Climbing,40.71468,-73.989776,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-05,Gray,Moving,"Climbing, Foraging",40.714846,-73.989679,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-06,Gray,Ground Plane,"Running, Chasing",40.715033,-73.989609,3/1/20
+LOWER MANHATTAN,C,Seward Park,14,C-14-07,Gray,Ground Plane,"Running, Chasing",40.715208,-73.989534,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-01,Gray,Above Ground,"Running, Climbing, Eating",40.712159,-73.979415,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-02,Gray,,"Eating, Foraging",40.712199,-73.979519,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-06,Gray,Above Ground,Ear scratching,40.712224,-73.979669,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-08,Gray,,Frolicking,40.711927,-73.979658,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-09,Gray,Above Ground,"Running, Climbing, Scratching",40.711866,-73.97976,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-10,Gray,Above Ground,"Running, Climbing",40.71174,-73.980539,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-12,Gray,Above Ground,Guarding,40.711316,-73.978343,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-13,Gray,Moving,"Running, Chasing, Climbing",40.711417,73.977767,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-14,Gray,Moving,"Running, Chasing, Climbing",40.711421,-73.977692,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-15,Gray,Moving,"Running, Chasing, Climbing",40.711409,-73.977719,3/1/20
+LOWER MANHATTAN,C,Corlears Hook Park,15,C-15-16,Cinnamon,Above Ground,Foraging,40.711303,-73.97759,3/1/20
+LOWER MANHATTAN,C,Columbus Park,16,C-16-01,Gray,Ground Plane,"Climbing, Eating, Foraging",40.714867,-74.000236,3/1/20
+LOWER MANHATTAN,C,Columbus Park,16,C-16-02,Gray,Ground Plane,"Running, Foraging",40.7159,-74.000167,3/1/20
+LOWER MANHATTAN,C,Columbus Park,16,C-16-04,Gray,Above Ground,Climbing,40.715779,-73.999887,3/1/20
+LOWER MANHATTAN,C,Teardrop Park,18,C-18-01,Gray,Ground Plane,"Running, Eating (or pretending to eat)",40.716335,-74.015612,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-01,Gray,Ground Plane,Foraging,40.712828,-74.005072,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-02,Gray,Above Ground,Climbing,40.712938,-74.005152,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-03,Gray,Above Ground,Climbing,40.712938,-74.005152,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-04,Gray,Ground Plane,"Eating, Burying",40.712893,-74.005233,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-05,Gray,Ground Plane,"Eating, Burying",40.712893,-74.005233,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-06,Gray,Ground Plane,Eating,40.712922,-74.005147,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-07,Gray,Ground Plane,Eating,40.712922,-74.005147,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-08,Gray,Ground Plane,Eating,40.713044,-74.005404,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-09,Gray,Above Ground,"Climbing, Foraging",40.712836,-74.005662,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-10,Gray,Ground Plane,Running,40.712881,-74.005823,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-11,Gray,Ground Plane,"Eating, Foraging",40.712995,-74.005963,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-12,Gray,Ground Plane,Very carefully watching a cat,40.713044,-74.006242,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-13,Gray,Above Ground,Chattering,40.713276,-74.006323,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-14,Gray,Ground Plane,"Eating (nuts), Foraging",40.713339,-74.006313,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-15,Gray,Ground Plane,Running,40.713518,-74.006308,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-16,Gray,Above Ground,"Climbing, Foraging",40.71312,-74.006862,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-17,Gray,Ground Plane,"Eating, Foraging",40.712872,-74.006878,3/1/20
+LOWER MANHATTAN,C,City Hall Park,19,C-19-18,Gray,Ground Plane,"Eating, Foraging",40.712872,-74.006878,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-06,Cinnamon,Ground Plane,"Chillin', Rubbing butt on ground",40.703882,-74.015955,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-07,Cinnamon,Ground Plane,Running,40.704211,-74.015859,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-08,Gray,Ground Plane,Foraging,40.704142,-74.015837,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-09,Gray,Ground Plane,Foraging,40.704175,-74.015306,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-10,Gray,Ground Plane,Running,40.704171,-74.015242,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-11,Gray,Ground Plane,Foraging,40.704468,-74.014774,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-12,Gray,Ground Plane,Foraging,40.704453,-74.014757,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-13,Gray,Ground Plane,Eating,40.70442,-74.014741,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-14,Gray,Above Ground,Sticking out of a tree,40.704188,-74.014853,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-15,Gray,,Chasing,40.70352,-74.015273,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-16,Gray,,Chasing,40.703487,-74.015278,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-17,Gray,,Hangin' with #13 & #14,40.703989,-74.015202,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-19,Gray,Above Ground,Climbing (tree),40.70295,-74.015813,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-21,Gray,Above Ground,Snacking in a tree,40.702922,-74.016629,3/1/20
+LOWER MANHATTAN,C,Battery Park,20,C-20-23,Gray,,Prancing about,40.702313,-74.015644,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-01,Gray,Above Ground,battery,40.725308,-73.942789,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-02,Gray,Above Ground,"Climbing, Foraging, Self-cleaning",40.725511,-73.943609,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-03,Gray,Ground Plane,Chasing,40.725511,-73.943448,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-04,Gray,Above Ground,Climbing,40.725478,-73.944113,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-05,Gray,Above Ground,Eating,40.725527,-73.943974,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-06,Gray,Ground Plane,Eating,40.725397,-73.944124,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-07,Gray,Above Ground,Climbing,40.725413,-73.943984,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-08,Gray,Ground Plane,Climbing (down),40.724755,-73.944006,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-09,Gray,Ground Plane,Climbing (down),40.723974,-73.943845,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-10,Gray,Ground Plane,Climbing (down),40.723462,-73.943952,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-11,Gray,Ground Plane,Climbing (down),40.725372,-73.943652,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-12,Gray,Above Ground,Sitting,40.725364,-73.943512,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-13,Gray,Ground Plane,Running,40.725397,-73.943297,3/1/20
+BROOKLYN,D,Msgr. McGolrick Park,21,D-21-14,Gray,Ground Plane,Running,40.725197,-73.943273,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-01,Cinnamon,Ground Plane,Eating,40.72167,-73.953364,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-02,Gray,Ground Plane,Eating,40.721768,-73.953192,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-03,Gray,Ground Plane,Running,40.721662,-73.953278,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-04,Gray,Above Ground,Climbing,40.721857,-73.953139,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-05,Cinnamon,Ground Plane,Running,40.721941,-73.952947,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-06,Cinnamon,Above Ground,Climbing,40.722039,-73.952796,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-07,Cinnamon,Ground Plane,Chasing,40.72147,-73.952857,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-08,Cinnamon,Ground Plane,Running,40.721713,-73.95305,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-09,Gray,Ground Plane,"Eating, Foraging",40.721933,-73.953147,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-10,Gray,Above Ground,Climbing,40.722283,-73.953115,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-11,Gray,Ground Plane,Running,40.722698,-73.953198,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-12,Gray,Ground Plane,"Eating, Foraging",40.722819,-73.952095,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-13,Gray,Above Ground,Climbing,40.722966,-73.951987,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-14,Cinnamon,Above Ground,"Climbing, Sitting in short tree",40.723136,-73.951794,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-15,Gray,Above Ground,Eating,40.723071,-73.951697,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-16,Cinnamon,Ground Plane,"Foraging, Jumping",40.723006,-73.951655,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-17,Gray,Above Ground,Chilling,40.722962,-73.951752,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-18,Cinnamon,Above Ground,Hanging,40.722603,-73.951449,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-19,Cinnamon,Above Ground,"Running, Climbing",40.721247,-73.951609,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-20,Gray,Above Ground,Climbing,40.720606,-73.952769,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-21,Gray,Above Ground,"Chasing, Climbing",40.720582,-73.952694,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-22,Gray,Above Ground,Climbing,40.720533,-73.95272,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-23,Gray,Above Ground,Climbing,40.720488,-73.952806,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-24,Gray,Ground Plane,"Eating, Foraging",40.720458,-73.954244,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-25,Gray,Ground Plane,Foraging,40.720018,-73.953442,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-26,Gray,Ground Plane,"Running, Foraging",40.720026,-73.953652,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-27,Gray,Ground Plane,"Eating (bread crumbs), Foraging",40.719777,-73.952774,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-28,Gray,Ground Plane,Running,40.720114,-73.952768,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-29,Gray,Ground Plane,Hanging out,40.719944,-73.952505,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-30,Gray,Ground Plane,Foraging,40.720448,-73.952521,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-31,Cinnamon,Ground Plane,Foraging,40.720412,-73.952353,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-32,Gray,Ground Plane,Foraging,40.720372,-73.952326,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-33,Gray,Ground Plane,Foraging,40.720749,-73.951891,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-34,Cinnamon,Above Ground,Sleeping (Dead?),40.721181,-73.951255,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-35,Cinnamon,Above Ground,Sleeping (Dead?),40.721181,-73.951255,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-36,Cinnamon,Ground Plane,Eating (tortilla/chip),40.72112,-73.95104,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-37,Gray,Ground Plane,Running,40.721315,-73.950943,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-38,Gray,Ground Plane,Eating,40.721258,-73.950799,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-39,Gray,Ground Plane,Eating,40.721217,-73.95077,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-40,Cinnamon,Ground Plane,Foraging,40.721173,-73.950781,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-41,Cinnamon,Above Ground,"Running, Foraging",40.721161,-73.950732,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-42,Gray,Above Ground,Climbing,40.721124,-73.950797,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-43,Gray,Above Ground,"Running, Chasing, Climbing",40.721026,-73.950765,3/1/20
+BROOKLYN,D,McCarren Park,22,D-22-44,Gray,Ground Plane,Foraging,40.719376,-73.952326,3/1/20

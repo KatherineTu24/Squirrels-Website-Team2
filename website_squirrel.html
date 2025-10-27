@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tail Trails - NYC Squirrel Census Prediction Project</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Custom Vintage Paper Theme */
+        :root {
+            --color-cream: #FAF8F3;
+            --color-dark-brown: #2C1810;
+            --color-card: #FFFEF9;
+            --color-warm-brown: #8B5D33;
+            --color-soft-amber: #E6A82C;
+            --color-muted-green: #7B9A6B;
+            --color-pop-red: #D2312C;
+            --color-muted: #F5F1E8;
+            --color-accent: #D4C4A8;
+            --color-text-muted: #6B5B4F;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-cream);
+            color: var(--color-dark-brown);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 { font-size: 2.5rem; line-height: 1.2; }
+        h2 { font-size: 2rem; line-height: 1.2; }
+        h3 { font-size: 1.5rem; line-height: 1.3; }
+        h4 { font-size: 1.125rem; line-height: 1.3; }
+
+        .font-typewriter {
+            font-family: 'Courier Prime', monospace !important;
+        }
+
+        .vintage-paper {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            position: relative;
+        }
+
+        .vintage-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(90deg, transparent 79px, rgba(44, 24, 16, 0.04) 81px, transparent 82px),
+                linear-gradient(rgba(44, 24, 16, 0.02) 0.5px, transparent 0.5px);
+            background-size: 81px 20px, 100% 20px;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .stamp-badge {
+            position: relative;
+            border: 2px dashed currentColor;
+            border-radius: 0;
+            padding: 0.5rem 1rem;
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transform: rotate(-2deg);
+            display: inline-block;
+        }
+
+        .stamp-badge::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 1px solid currentColor;
+            border-radius: 2px;
+        }
+
+        .card {
+            background-color: var(--color-card);
+            border: 3px solid;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background-color: var(--color-pop-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #B91C1C;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid;
+        }
+
+        /* Utility classes */
+        .hidden { display: none; }
+        .grid { display: grid; }
+        .flex { display: flex; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-4 { margin-top: 1rem; }
+        .text-center { text-align: center; }
+        .w-full { width: 100%; }
+
+        @media (min-width: 768px) {
+            .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .md\\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--color-accent);
+            background-color: var(--color-card);
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.875rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-accent);
+        }
+
+        th {
+            font-weight: 700;
+            border-bottom: 2px solid var(--color-warm-brown);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--color-muted);
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ===== DATA =====
+        // Global variable to store loaded TTL data
+        let rawSquirrelData = [];
+        let dataLoaded = false;
+        let educationHQData = null;
+
+        // CSV Parser function
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < lines[i].length; j++) {
+                    const char = lines[i][j];
+                    
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                
+                if (values.length >= headers.length) {
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index] || '';
+                    });
+                    data.push(row);
+                }
+            }
+            
+            return data;
+        }
+
+        // Load CSV data from file
+        async function loadTTLData() {
+            try {
+                const response = await fetch('http://localhost:5000/data/csv-format');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                const ttlData = result.data;
+                
+                // Transform TTL data to our format
+                rawSquirrelData = ttlData.map(row => ({
+                    park: row['park_name'] || '',
+                    color: row['fur_color'] || '',
+                    activity: row['activities'] || '',
+                    location: row['location'] || ''
+                })).filter(row => row.park && row.color && row.activity);
+                
+                dataLoaded = true;
+                console.log(`Loaded ${rawSquirrelData.length} squirrel observations from TTL data`);
+                return true;
+            } catch (error) {
+                console.error('Error loading TTL data:', error);
+                // No fallback data - return empty array
+                rawSquirrelData = [];
+                dataLoaded = true;
+                return false;
+            }
+        }
+
+        // Load Education HQ data from API
+        async function loadEducationHQData() {
+            try {
+                const response = await fetch('http://localhost:5000/data/education-hq');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                educationHQData = result;
+                console.log('Education HQ data loaded:', result);
+                return true;
+            } catch (error) {
+                console.error('Error loading Education HQ data:', error);
+                return false;
+            }
+        }
+
+        async function loadParkDetails(selectedColor = '') {
+            try {
+                const url = selectedColor ? 
+                    `http://localhost:5000/data/park-details?color=${selectedColor}` : 
+                    'http://localhost:5000/data/park-details';
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                window.parkDetails = result.parks;
+                console.log('Park details loaded:', result);
+                return true;
+            } catch (error) {
+                console.error('Error loading park details:', error);
+                return false;
+            }
+        }
+
+        function getParkDetails(parkName) {
+            if (!window.parkDetails) return null;
+            return window.parkDetails.find(p => p.name === parkName);
+        }
+
+
+        // Calculate color distributions from actual data
+        function calculateColorDistributionFromData(parkName) {
+            const parkData = rawSquirrelData.filter(squirrel => squirrel.park === parkName);
+            const total = parkData.length;
+            if (total === 0) return { gray: 0, black: 0, cinnamon: 0 }; // no data
+            
+            const gray = parkData.filter(s => s.color === 'Gray').length / total;
+            const black = parkData.filter(s => s.color === 'Black').length / total;
+            const cinnamon = parkData.filter(s => s.color === 'Cinnamon').length / total;
+            
+            return { gray, black, cinnamon };
+        }
+
+        // Calculate activity patterns from actual data
+        function calculateActivityPatterns(parkName) {
+            const parkData = rawSquirrelData.filter(squirrel => squirrel.park === parkName);
+            const activities = {};
+            
+            parkData.forEach(squirrel => {
+                const activityList = squirrel.activity.split(', ').map(a => a.trim());
+                activityList.forEach(activity => {
+                    activities[activity] = (activities[activity] || 0) + 1;
+                });
+            });
+            
+            // Convert to percentages
+            const total = parkData.length;
+            Object.keys(activities).forEach(activity => {
+                activities[activity] = Math.round((activities[activity] / total) * 100);
+            });
+            
+            return activities;
+        }
+
+        // Calculate data collection priority based on actual data
+        function calculateDataCollectionPriority(parkName) {
+            const parkData = rawSquirrelData.filter(squirrel => squirrel.park === parkName);
+            const totalObservations = parkData.length;
+            
+            // Parks with fewer observations need higher priority
+            if (totalObservations < 15) return 'high';
+            if (totalObservations < 25) return 'medium';
+            return 'low';
+        }
+
+        // Calculate confidence measures based on data quality
+        function calculateConfidenceMeasures(parkName) {
+            const parkData = rawSquirrelData.filter(squirrel => squirrel.park === parkName);
+            const total = parkData.length;
+            
+            if (total === 0) return { confidence: 0.3, reasons: ['No data available'] };
+            
+            let confidence = 0.5; // base confidence
+            const reasons = [];
+            
+            // More observations = higher confidence
+            if (total > 30) {
+                confidence += 0.2;
+                reasons.push('High observation count');
+            } else if (total > 15) {
+                confidence += 0.1;
+                reasons.push('Moderate observation count');
+            } else {
+                reasons.push('Low observation count');
+            }
+            
+            // Color diversity = higher confidence
+            const colors = [...new Set(parkData.map(s => s.color))];
+            if (colors.length >= 3) {
+                confidence += 0.1;
+                reasons.push('Good color diversity');
+            } else if (colors.length === 2) {
+                confidence += 0.05;
+                reasons.push('Some color diversity');
+            } else {
+                reasons.push('Limited color diversity');
+            }
+            
+            // Activity diversity = higher confidence
+            const allActivities = parkData.flatMap(s => s.activity.split(', ').map(a => a.trim()));
+            const uniqueActivities = [...new Set(allActivities)];
+            if (uniqueActivities.length > 8) {
+                confidence += 0.1;
+                reasons.push('Rich activity data');
+            } else if (uniqueActivities.length > 4) {
+                confidence += 0.05;
+                reasons.push('Moderate activity data');
+            } else {
+                reasons.push('Limited activity data');
+            }
+            
+            return {
+                confidence: Math.min(0.95, Math.max(0.1, confidence)),
+                reasons
+            };
+        }
+
+        // Environmental impact explanations (SHAP-like)
+        function calculateEnvironmentalImpact(parkName, selectedColor) {
+            const parkData = rawSquirrelData.filter(squirrel => squirrel.park === parkName);
+            const colorData = parkData.filter(s => s.color === selectedColor);
+            
+            const factors = [];
+            
+            // Location preference
+            const groundCount = colorData.filter(s => s.location === 'Ground Plane').length;
+            const aboveCount = colorData.filter(s => s.location === 'Above Ground').length;
+            
+            if (groundCount > aboveCount) {
+                factors.push({ factor: 'Ground Activity', impact: 'positive', description: `${selectedColor} squirrels prefer ground-level activities` });
+            } else if (aboveCount > groundCount) {
+                factors.push({ factor: 'Tree Activity', impact: 'positive', description: `${selectedColor} squirrels are often found in trees` });
+            }
+            
+            // Activity patterns
+            const activities = {};
+            colorData.forEach(squirrel => {
+                const activityList = squirrel.activity.split(', ').map(a => a.trim());
+                activityList.forEach(activity => {
+                    activities[activity] = (activities[activity] || 0) + 1;
+                });
+            });
+            
+            // Find all activities with the highest count (handles ties)
+            const activityEntries = Object.entries(activities);
+            if (activityEntries.length > 0) {
+                const maxCount = Math.max(...activityEntries.map(([_, count]) => count));
+                const topActivities = activityEntries
+                    .filter(([_, count]) => count === maxCount)
+                    .map(([activity, _]) => activity);
+                
+                if (topActivities.length > 0) {
+                    const activityText = topActivities.length === 1 
+                        ? topActivities[0].toLowerCase()
+                        : topActivities.map(a => a.toLowerCase()).join(', ');
+                    
+                    factors.push({ 
+                        factor: 'Primary Activity', 
+                        impact: 'positive', 
+                        description: `Most ${selectedColor} squirrels are observed ${activityText}` 
+                    });
+                }
+            }
+            
+            // Data quality impact
+            if (colorData.length < 5) {
+                factors.push({ 
+                    factor: 'Data Quality', 
+                    impact: 'negative', 
+                    description: 'Limited observations for this color in this park' 
+                });
+            }
+            
+            return factors;
+        }
+
+        // Real parks from CSV data - will be populated dynamically
+        let parkData = [];
+
+        // Function to create park data from CSV observations
+        function createParkDataFromCSV() {
+            const parkNames = [...new Set(rawSquirrelData.map(s => s.park))];
+            
+            return parkNames.map((parkName, index) => {
+                const parkObservations = rawSquirrelData.filter(s => s.park === parkName);
+                const totalObservations = parkObservations.length;
+                
+                // Calculate base activity based on observation count
+                const baseActivity = Math.min(95, Math.max(30, totalObservations * 2));
+                
+                // Generate fun facts based on actual data
+                const colors = [...new Set(parkObservations.map(s => s.color))];
+                const activities = [...new Set(parkObservations.flatMap(s => s.activity.split(', ').map(a => a.trim())))];
+                
+                let funFact = `${parkName} has ${totalObservations} recorded observations`;
+                if (colors.length > 1) {
+                    funFact += ` with ${colors.join(', ')} squirrels`;
+                }
+                if (activities.length > 3) {
+                    funFact += ` showing diverse activities like ${activities.slice(0, 3).join(', ')}`;
+                }
+                
+                return {
+                    id: index + 1,
+                    name: parkName,
+                    baseActivity: baseActivity,
+                    treeCanopy: Math.floor(Math.random() * 40) + 40, // 40-80%
+                    humanTraffic: Math.floor(Math.random() * 40) + 60, // 60-100%
+                    foodSources: Math.floor(Math.random() * 30) + 70, // 70-100%
+                    shelterAvailability: Math.floor(Math.random() * 50) + 50, // 50-100%
+                    recentObservations: totalObservations,
+                    lastUpdateDays: Math.floor(Math.random() * 30) + 1 // 1-30 days
+                };
+            });
+        }
+
+
+        // ===== STATE =====
+        let state = {
+            currentPage: 'home',
+            selectedColor: 'gray',
+            selectedParkId: 1,
+            modelProbs: null, // map of park_name -> probability (0-1)
+            loading: false,
+            error: null,
+            dataLoading: true,
+            dataError: null
+        };
+
+        // ===== CALCULATIONS =====
+        function calculateColorDistribution(park) {
+            return calculateColorDistributionFromData(park.name);
+        }
+
+        function calculateDataPriority(park) {
+            return calculateDataCollectionPriority(park.name);
+        }
+
+        function calculateParkPredictions(selectedColor) {
+            // Get parks to use (either from parkData or from raw data)
+            const parksToUse = parkData.length > 0 ? parkData : 
+                [...new Set(rawSquirrelData.map(s => s.park))].map((parkName, index) => ({
+                    id: index + 1,
+                    name: parkName,
+                    baseActivity: 50, // Default activity
+                    recentObservations: rawSquirrelData.filter(s => s.park === parkName).length
+                }));
+            
+            // If we have ML model predictions, use only the top 5 parks
+            if (state.modelProbs && Object.keys(state.modelProbs).length > 0) {
+                const topParks = Object.entries(state.modelProbs)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 5)
+                    .map(([parkName, probability]) => {
+                        const park = parksToUse.find(p => p.name === parkName);
+                        if (!park) return null;
+                        
+                        const colors = calculateColorDistribution(park);
+                        const activityPatterns = calculateActivityPatterns(park.name);
+                        const confidence = calculateConfidenceMeasures(park.name);
+                        const environmentalFactors = calculateEnvironmentalImpact(park.name, selectedColor);
+                        
+                        return {
+                            id: park.id,
+                            name: park.name,
+                            probability: Math.round(probability * 100),
+                            colorDistribution: colors,
+                            funFact: `${park.name} - ML predicted ${Math.round(probability * 100)}% accuracy (model accuracy: 19.3%)`,
+                            dataPriority: calculateDataPriority(park),
+                            activityPatterns: activityPatterns,
+                            confidence: confidence,
+                            environmentalFactors: environmentalFactors,
+                            park: park
+                        };
+                    })
+                    .filter(p => p !== null);
+                
+                return topParks;
+            }
+            
+            // Use all parks with calculated probabilities
+            return parksToUse.map(park => {
+                const colors = calculateColorDistribution(park);
+                const colorProportion = colors[selectedColor];
+                const baseActivity = park.baseActivity || 50;
+                const rawProbability = (colorProportion * baseActivity) / 100;
+                const adjustedProbability = Math.min(85, Math.max(5, Math.round(rawProbability * 100)));
+                
+                // Calculate new features
+                const activityPatterns = calculateActivityPatterns(park.name);
+                const confidence = calculateConfidenceMeasures(park.name);
+                const environmentalFactors = calculateEnvironmentalImpact(park.name, selectedColor);
+                
+                return {
+                    id: park.id,
+                    name: park.name,
+                    probability: adjustedProbability,
+                    colorDistribution: colors,
+                    funFact: `${park.name} has ${park.recentObservations || 0} recorded observations`,
+                    dataPriority: calculateDataPriority(park),
+                    activityPatterns: activityPatterns,
+                    confidence: confidence,
+                    environmentalFactors: environmentalFactors,
+                    park: park
+                };
+            }).sort((a, b) => b.probability - a.probability).slice(0, 5);
+        }
+
+        async function loadPredictionsForColor(color) {
+            state.loading = true;
+            state.error = null;
+            render();
+            try {
+                // Map UI color to model's expected casing
+                const furColor = ({ gray: 'Gray', black: 'Black', cinnamon: 'Cinnamon' })[color] || 'Gray';
+                // Use defaults for non-UI features; adjust if you capture these from UI later
+                const payload = {
+                    fur_color: furColor,
+                    location: 'Ground Plane',
+                    time_of_day: 'afternoon',
+                    weather_bucket: 'clear'
+                };
+                const res = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || `Request failed: ${res.status}`);
+                }
+                const json = await res.json();
+                if (json.success) {
+                // json.probabilities is a map of park_name -> probability [0,1]
+                state.modelProbs = json.probabilities || null;
+                    console.log('ML Model predictions loaded:', state.modelProbs);
+                } else {
+                    throw new Error(json.error || 'Unknown error from ML model');
+                }
+            } catch (e) {
+                console.error('ML Model error:', e);
+                state.error = 'Failed to load ML predictions';
+                state.modelProbs = null;
+            } finally {
+                state.loading = false;
+                render();
+            }
+        }
+
+        // ===== RENDERING =====
+        function render() {
+            const app = document.getElementById('app');
+            
+            // Show loading screen if data is still loading
+            if (state.dataLoading) {
+                app.innerHTML = renderLoadingPage();
+                return;
+            }
+            
+            // Show error page if data failed to load
+            if (state.dataError) {
+                app.innerHTML = renderErrorPage();
+                return;
+            }
+            
+            const predictions = calculateParkPredictions(state.selectedColor);
+            const bestPark = predictions.reduce((best, current) => 
+                current.probability > best.probability ? current : best
+            );
+            const selectedPark = predictions.find(p => p.id === state.selectedParkId) || predictions[0];
+
+            if (state.currentPage === 'home') {
+                app.innerHTML = renderHomePage();
+            } else if (state.currentPage === 'prediction') {
+                app.innerHTML = renderPredictionPage(predictions, bestPark, selectedPark);
+            } else if (state.currentPage === 'learning') {
+                app.innerHTML = renderLearningPage(predictions);
+            } else if (state.currentPage === 'data') {
+                app.innerHTML = renderDataPage();
+            }
+
+            attachEventListeners();
+        }
+
+        function renderLoadingPage() {
+            return `
+                <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                    <div class="card vintage-paper" style="border-color: var(--color-soft-amber); padding: 3rem; text-align: center; max-width: 32rem;">
+                        <div style="background-color: var(--color-soft-amber); padding: 1.5rem; border-radius: 9999px; display: inline-block; margin-bottom: 2rem; transform: rotate(3deg);">
+                            <span style="font-size: 3rem;">🐿️</span>
+                        </div>
+                        <h2 style="color: var(--color-dark-brown); font-size: 1.5rem; margin-bottom: 1rem;">LOADING SQUIRREL DATA</h2>
+                        <p class="font-typewriter" style="color: var(--color-text-muted); margin-bottom: 2rem;">Analyzing TTL data for accurate predictions...</p>
+                        <div style="background-color: var(--color-muted); border: 2px solid var(--color-accent); padding: 1rem; border-radius: 0.5rem;">
+                            <div class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem;">
+                                <div style="margin-bottom: 0.5rem;">📊 Processing observation data</div>
+                                <div style="margin-bottom: 0.5rem;">🎨 Calculating color distributions</div>
+                                <div>📈 Computing confidence measures</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderErrorPage() {
+            return `
+                <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                    <div class="card vintage-paper" style="border-color: var(--color-pop-red); padding: 3rem; text-align: center; max-width: 32rem;">
+                        <div style="background-color: var(--color-pop-red); padding: 1.5rem; border-radius: 9999px; display: inline-block; margin-bottom: 2rem; transform: rotate(-2deg);">
+                            <span style="font-size: 3rem;">⚠️</span>
+                        </div>
+                        <h2 style="color: var(--color-dark-brown); font-size: 1.5rem; margin-bottom: 1rem;">DATA LOADING ERROR</h2>
+                        <p class="font-typewriter" style="color: var(--color-text-muted); margin-bottom: 2rem;">Could not load squirrel data from TTL file</p>
+                        <div style="background-color: rgba(210, 49, 44, 0.1); border: 1px solid var(--color-pop-red); padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+                            <p class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin: 0;">
+                                Please check that the TTL file exists and the API is running
+                            </p>
+                        </div>
+                        <button onclick="initializeApp()" class="btn btn-primary" style="padding: 1rem 2rem;">
+                            <span style="margin-right: 0.5rem;">🔄</span>
+                            RETRY LOADING
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHomePage() {
+            return `
+                <div class="min-h-screen vintage-paper" style="background-color: var(--color-cream);">
+                    <!-- Top Menu Bar -->
+                    <header class="vintage-paper sticky top-0 z-50" style="background-color: rgba(255, 254, 249, 0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--color-warm-brown);">
+                        <div class="mx-auto px-4 py-6" style="max-width: 72rem;">
+                            <!-- Title Section -->
+                            <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                <div style="background-color: var(--color-soft-amber); padding: 0.75rem; border-radius: 0.5rem; transform: rotate(3deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                    <span style="font-size: 2rem;">🐿️</span>
+                                </div>
+                                <div>
+                                    <h1 style="color: var(--color-dark-brown); font-size: 2.5rem; margin: 0;">TAIL TRAILS</h1>
+                                    <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-top: 0.5rem;">
+                                        DEPT. OF URBAN WILDLIFE STUDIES
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            <!-- Breadcrumb Navigation -->
+                            <nav class="border-t border-gray-200 pt-4">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <a href="#" onclick="renderHomePage(); return false;" class="text-amber-600 hover:text-amber-800 font-typewriter">🏠 Home</a>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+
+                    <!-- Hero Section -->
+                    <main class="mx-auto px-4 py-16" style="max-width: 72rem;">
+                        <div class="text-center mb-16">
+                            <div class="relative mb-12">
+                                <div style="background-color: var(--color-pop-red); color: white; padding: 0.5rem 1.5rem; transform: rotate(-2deg); display: inline-block; margin-bottom: 2rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                    <span class="font-typewriter" style="font-size: 0.875rem;">WHERE IS MY SQUIRREL?</span>
+                                </div>
+                                <div class="relative inline-block">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1646975929480-9cc8789f58d0?w=400"
+                                        alt="Urban Gray Squirrel"
+                                        style="width: 12rem; height: 12rem; margin: 0 auto; object-fit: cover; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: rotate(1deg); border: 8px solid var(--color-card); box-shadow: 0 0 0 2px var(--color-warm-brown), 8px 8px 0 #E8DCC6;"
+                                    />
+                                    <div style="position: absolute; bottom: -1rem; right: -1rem; background-color: var(--color-soft-amber); color: var(--color-dark-brown); padding: 0.25rem 0.75rem; font-family: 'Courier Prime', monospace; font-size: 0.75rem; transform: rotate(12deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                        SUBJECT #001
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-warm-brown); padding: 2rem; margin-bottom: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: rotate(-1deg); max-width: 56rem; margin-left: auto; margin-right: auto;">
+                                <h2 style="color: var(--color-dark-brown); font-size: 1.5rem; margin-bottom: 1.5rem;">OFFICIAL RESEARCH MISSION</h2>
+                                <p style="max-width: 48rem; margin: 0 auto; color: var(--color-dark-brown); font-size: 1.125rem; line-height: 1.75;">
+                                    Welcome to the Squirrel Census Prediction Project! Our advanced models analyze historical data to predict where squirrels of different colors are most likely to appear in NYC parks.
+                                    <span class="font-typewriter" style="color: var(--color-warm-brown);"> Where are they hiding? </span>
+                                    Choose your desired squirrel color and discover the best parks to find them.
+                                </p>
+                                <div style="background-color: rgba(210, 49, 44, 0.1); border: 2px solid var(--color-pop-red); padding: 1rem; border-radius: 0.5rem; margin-top: 1.5rem; max-width: 32rem; margin-left: auto; margin-right: auto;">
+                                    <p class="font-typewriter text-center" style="color: var(--color-dark-brown); margin: 0;">
+                                        <span style="color: var(--color-pop-red); font-weight: 700;">⏰ OPTIMAL SIGHTING WINDOW:</span><br/>
+                                        All predictions are calibrated for <strong>3:00-4:00 PM</strong> visits
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-6" style="flex-direction: column; align-items: center;">
+                                <button onclick="changePage('prediction')" class="btn btn-primary" style="padding: 1.5rem 2.5rem; font-size: 1.25rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                    <span style="font-size: 1.5rem; margin-right: 0.75rem;">🗺️</span>
+                                    SQUIRREL LOCATOR
+                                </button>
+
+                                <div class="flex gap-4">
+                                    <button onclick="changePage('learning')" class="btn btn-outline" style="border-color: var(--color-muted-green); color: var(--color-muted-green); padding: 0.75rem 1.5rem;">
+                                        <span style="margin-right: 0.5rem;">📚</span>
+                                        Education HQ
+                                    </button>
+                                    <button onclick="changePage('data')" class="btn btn-outline" style="border-color: var(--color-warm-brown); color: var(--color-warm-brown); padding: 0.75rem 1.5rem;">
+                                        <span style="margin-right: 0.5rem;">🔬</span>
+                                        Research Lab
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature Cards -->
+                        <div class="grid md:grid-cols-3 gap-8 mt-20">
+                            <div class="card vintage-paper" style="border-color: var(--color-muted-green); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
+                                <div class="text-center">
+                                    <div style="margin: 0 auto 1rem; width: 4rem; height: 4rem; background-color: var(--color-muted-green); border-radius: 9999px; display: flex; align-items: center; justify-content: center; transform: rotate(-3deg);">
+                                        <span style="font-size: 2rem;">🎯</span>
+                                    </div>
+                                    <h3 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">PREDICTION ACCURACY</h3>
+                                    <div class="stamp-badge" style="color: var(--color-muted-green); font-size: 0.75rem; margin-bottom: 1rem;">VERIFIED DATA</div>
+                                </div>
+                                <p style="color: var(--color-dark-brown); line-height: 1.75;">
+                                    Our ML models achieve <span class="font-typewriter" style="color: var(--color-pop-red);">19.3% accuracy</span> in predicting squirrel sightings based on historical patterns.
+                                </p>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-soft-amber); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
+                                <div class="text-center">
+                                    <div style="margin: 0 auto 1rem; width: 4rem; height: 4rem; background-color: var(--color-soft-amber); border-radius: 9999px; display: flex; align-items: center; justify-content: center; transform: rotate(2deg);">
+                                        <span style="font-size: 2rem;">📡</span>
+                                    </div>
+                                    <h3 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">LIVE DATA STREAM</h3>
+                                    <div class="stamp-badge" style="color: var(--color-soft-amber); font-size: 0.75rem; margin-bottom: 1rem;">REAL-TIME UPDATES</div>
+                                </div>
+                                <p style="color: var(--color-dark-brown); line-height: 1.75;">
+                                    Real-time observations and crowd-sourced data keep our predictions <span class="font-typewriter" style="color: var(--color-warm-brown);">current & reliable</span>.
+                                </p>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-warm-brown); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
+                                <div class="text-center">
+                                    <div style="margin: 0 auto 1rem; width: 4rem; height: 4rem; background-color: var(--color-warm-brown); border-radius: 9999px; display: flex; align-items: center; justify-content: center; transform: rotate(-1deg);">
+                                        <span style="font-size: 2rem;">👥</span>
+                                    </div>
+                                    <h3 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">CITIZEN SCIENTISTS</h3>
+                                    <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-bottom: 1rem;">VOLUNTEER NETWORK</div>
+                                </div>
+                                <p style="color: var(--color-dark-brown); line-height: 1.75;">
+                                    Join <span class="font-typewriter" style="color: var(--color-pop-red);">thousands</span> of citizen scientists helping us map and understand urban squirrel populations.
+                                </p>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            `;
+        }
+
+        function renderPredictionPage(predictions, bestPark, selectedPark) {
+            const colorButtons = [
+                { color: 'gray', emoji: '🐿️', label: 'GRAY SQUIRREL', bgColor: '#9CA3AF' },
+                { color: 'black', emoji: '🖤', label: 'BLACK SQUIRREL', bgColor: '#374151' },
+                { color: 'cinnamon', emoji: '🟤', label: 'CINNAMON SQUIRREL', bgColor: '#D97706' }
+            ];
+
+            const highProb = predictions.filter(p => p.probability >= 70);
+            const moderateProb = predictions.filter(p => p.probability >= 40 && p.probability < 70);
+            const lowProb = predictions.filter(p => p.probability < 40);
+
+            return `
+                <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh;">
+                    <!-- Top Menu Bar -->
+                    <header class="vintage-paper sticky top-0 z-50" style="background-color: rgba(255, 254, 249, 0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--color-warm-brown);">
+                        <div class="mx-auto px-4 py-6" style="max-width: 72rem;">
+                            <!-- Title Section -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div style="background-color: var(--color-soft-amber); padding: 0.75rem; border-radius: 0.5rem; transform: rotate(3deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                        <span style="font-size: 2rem;">🐿️</span>
+                                    </div>
+                                    <div>
+                                        <h1 style="color: var(--color-dark-brown); font-size: 2.5rem; margin: 0;">TAIL TRAILS</h1>
+                                        <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-top: 0.5rem;">
+                                            DEPT. OF URBAN WILDLIFE STUDIES
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Breadcrumb Navigation -->
+                            <nav class="border-t border-gray-200 pt-4">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <a href="#" onclick="changePage('home'); return false;" class="text-amber-600 hover:text-amber-800 font-typewriter">🏠 Home</a>
+                                    <span class="text-gray-400">›</span>
+                                    <span class="text-gray-600 font-typewriter">Squirrel Locator</span>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <div style="display: flex; min-height: calc(100vh - 200px);">
+                    <!-- Sidebar -->
+                    <div class="vintage-paper" style="width: 18rem; background-color: var(--color-card); border-right: 4px solid var(--color-warm-brown); display: flex; flex-direction: column;">
+                        <div class="p-6" style="border-bottom: 2px solid #E8DCC6;">
+                            <h2 style="color: var(--color-dark-brown); font-size: 1.5rem; margin: 0;">SQUIRREL LOCATOR</h2>
+                            <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.5rem;">Choose your squirrel color to find the best parks</p>
+                            ${state.loading ? `<div class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.75rem; margin-top: 0.5rem;">Loading predictions…</div>` : ''}
+                            ${state.error ? `<div class="font-typewriter" style="color: var(--color-pop-red); font-size: 0.75rem; margin-top: 0.5rem;">${state.error}</div>` : ''}
+                            <div style="background-color: rgba(230, 168, 44, 0.1); border: 1px solid var(--color-soft-amber); padding: 0.75rem; margin-top: 0.75rem; border-radius: 0.25rem;">
+                                <p class="font-typewriter text-center" style="font-size: 0.75rem; color: var(--color-dark-brown); margin: 0;">
+                                    ⏰ <strong>SIGHTING WINDOW: 3:00-4:00 PM</strong><br/>
+                                    <span style="color: var(--color-text-muted);">All data based on afternoon observations</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-6" style="flex: 1; overflow-y: auto;">
+                            <!-- Color Selection -->
+                            <div style="background-color: rgba(230, 168, 44, 0.1); padding: 1rem; border: 2px solid var(--color-soft-amber); border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                                <h3 class="font-typewriter text-center" style="color: var(--color-dark-brown); margin-bottom: 1rem;">SELECT SQUIRREL COLOR</h3>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    ${colorButtons.map(({ color, emoji, label, bgColor }) => `
+                                        <button onclick="selectColor('${color}')" class="font-typewriter" style="width: 100%; padding: 1rem; border: 2px solid ${state.selectedColor === color ? 'var(--color-pop-red)' : 'var(--color-accent)'}; border-radius: 0.5rem; background-color: ${state.selectedColor === color ? 'rgba(210, 49, 44, 0.1)' : 'var(--color-muted)'}; cursor: pointer; transition: all 0.2s;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                <div style="width: 2rem; height: 2rem; border-radius: 9999px; border: 2px solid white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); background-color: ${bgColor}; display: flex; align-items: center; justify-content: center; font-size: 1.125rem;">
+                                                    ${emoji}
+                                                </div>
+                                                <span style="color: var(--color-dark-brown); font-weight: 700;">${label}</span>
+                                            </div>
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Best Park -->
+                            <div style="background-color: rgba(210, 49, 44, 0.1); padding: 1rem; border: 2px solid var(--color-pop-red); border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                                <h3 class="font-typewriter text-center" style="color: var(--color-dark-brown); margin-bottom: 1rem;">BEST LOCATION</h3>
+                                <div class="text-center">
+                                    <div style="font-size: 1.875rem; font-weight: 700; color: var(--color-pop-red); margin-bottom: 0.5rem;">${bestPark.name}</div>
+                                    <div style="font-size: 1.125rem; font-weight: 700; color: var(--color-warm-brown); margin-bottom: 0.25rem;">${bestPark.probability}% chance of sighting</div>
+                                    <div style="background-color: rgba(230, 168, 44, 0.1); border: 1px solid var(--color-soft-amber); padding: 0.5rem; margin-bottom: 0.75rem; border-radius: 0.25rem; text-align: center;">
+                                        <p class="font-typewriter" style="font-size: 0.75rem; color: var(--color-dark-brown); margin: 0;">
+                                            ⏰ <strong>VISIT BETWEEN 3:00-4:00 PM</strong> for best results
+                                        </p>
+                                    </div>
+                                    <button onclick="selectPark(${bestPark.id})" class="btn" style="background-color: var(--color-muted-green); color: white; padding: 0.5rem 1.5rem; font-size: 0.875rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                        📍 VIEW DETAILS
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Selected Park Details -->
+                            <div style="background-color: rgba(123, 154, 107, 0.1); padding: 1rem; border: 1px solid var(--color-muted-green); border-radius: 0.5rem;">
+                                <h4 class="font-typewriter text-center" style="color: var(--color-dark-brown); margin-bottom: 0.75rem;">PARK DETAILS</h4>
+                                <div class="font-typewriter" style="font-size: 0.875rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: var(--color-text-muted);">LOCATION:</span>
+                                        <span style="color: var(--color-dark-brown); font-weight: 700;">${selectedPark.name}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: var(--color-text-muted);">SIGHTING_CHANCE:</span>
+                                        <span style="color: var(--color-dark-brown); font-weight: 700;">${selectedPark.probability}%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="color: var(--color-text-muted);">BEST_TIME:</span>
+                                        <span style="color: var(--color-pop-red); font-weight: 700;">3:00-4:00 PM</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(123, 154, 107, 0.3);">
+                                    <p class="font-typewriter text-center" style="font-size: 0.75rem; color: var(--color-text-muted); font-style: italic; margin: 0;">
+                                        "${selectedPark.funFact}"
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="vintage-paper" style="flex: 1; background-color: var(--color-cream); padding: 1.5rem; overflow-y: auto;">
+                        <div style="max-width: 64rem; margin: 0 auto;">
+                            <!-- Directory Header -->
+                            <div class="card vintage-paper" style="border-color: var(--color-warm-brown); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                    <div style="background-color: var(--color-pop-red); padding: 0.75rem; transform: rotate(-3deg);">
+                                        <span style="font-size: 1.5rem;">📋</span>
+                                    </div>
+                                    <div>
+                                        <h2 style="color: var(--color-dark-brown); font-size: 1.5rem; margin: 0;">PARK DIRECTORY</h2>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.25rem;">
+                                            Results for <span style="color: var(--color-pop-red); font-weight: 700; text-transform: capitalize;">${state.selectedColor}</span> squirrels
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Legend -->
+                                <div style="background-color: rgba(230, 168, 44, 0.1); border: 1px solid var(--color-soft-amber); padding: 1rem; border-radius: 0.25rem;">
+                                    <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.75rem;">═══ PROBABILITY LEGEND ═══</h4>
+                                    <div class="grid md:grid-cols-3 gap-4 font-typewriter" style="font-size: 0.75rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <div style="width: 1rem; height: 1rem; background-color: var(--color-muted-green); border: 1px solid var(--color-dark-brown);"></div>
+                                            <span style="color: var(--color-dark-brown);">HIGH (70%+)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <div style="width: 1rem; height: 1rem; background-color: var(--color-soft-amber); border: 1px solid var(--color-dark-brown);"></div>
+                                            <span style="color: var(--color-dark-brown);">MODERATE (40-69%)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <div style="width: 1rem; height: 1rem; background-color: var(--color-pop-red); border: 1px solid var(--color-dark-brown);"></div>
+                                            <span style="color: var(--color-dark-brown);">LOW (5-39%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Park Categories -->
+                            ${[
+                                { title: 'HIGH PROBABILITY ZONES', parks: highProb, bgColor: 'rgba(123, 154, 107, 0.1)', borderColor: 'var(--color-muted-green)', accentColor: 'var(--color-muted-green)' },
+                                { title: 'MODERATE ACTIVITY AREAS', parks: moderateProb, bgColor: 'rgba(230, 168, 44, 0.1)', borderColor: 'var(--color-soft-amber)', accentColor: 'var(--color-soft-amber)' },
+                                { title: 'LOW PROBABILITY LOCATIONS', parks: lowProb, bgColor: 'rgba(210, 49, 44, 0.1)', borderColor: 'var(--color-pop-red)', accentColor: 'var(--color-pop-red)' }
+                            ].filter(cat => cat.parks.length > 0).map(category => `
+                                <div style="margin-bottom: 2rem;">
+                                    <div class="vintage-paper" style="background-color: ${category.bgColor}; border: 2px solid ${category.borderColor}; padding: 1rem; margin-bottom: 1rem;">
+                                        <h3 class="font-typewriter text-center" style="color: var(--color-dark-brown); font-size: 1.125rem; margin: 0;">${category.title}</h3>
+                                        <div class="font-typewriter text-center" style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">
+                                            ${category.parks.length} location${category.parks.length !== 1 ? 's' : ''} found
+                                        </div>
+                                    </div>
+
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        ${category.parks.sort((a, b) => b.probability - a.probability).map(park => `
+                                            <div class="card vintage-paper" onclick="selectPark(${park.id})" style="border: 2px solid ${category.borderColor}; cursor: pointer; transition: all 0.3s; ${park.id === state.selectedParkId ? 'box-shadow: 0 0 0 4px var(--color-pop-red); transform: scale(1.05);' : ''}">
+                                                <div style="padding-bottom: 0.75rem;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                            <div style="width: 3rem; height: 3rem; border: 2px solid white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transform: rotate(-3deg); background-color: ${category.accentColor};">
+                                                                🐿️
+                                                            </div>
+                                                            <div>
+                                                                <h3 style="color: var(--color-dark-brown); font-size: 1.125rem; margin: 0;">${park.name}</h3>
+                                                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+                                                                    <span class="font-typewriter" style="background-color: var(--color-dark-brown); color: var(--color-card); padding: 0.125rem 0.375rem; font-size: 0.75rem;">${park.probability}% CHANCE</span>
+                                                                    ${park.id === bestPark.id ? '<span class="font-typewriter" style="background-color: var(--color-pop-red); color: white; padding: 0.125rem 0.375rem; font-size: 0.75rem;">BEST MATCH</span>' : ''}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div style="text-align: right;">
+                                                            <div class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.75rem;">VISIT TIME</div>
+                                                            <div class="font-typewriter" style="color: var(--color-pop-red); font-weight: 700;">3-4PM</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="padding-top: 0;">
+                                                    <div class="font-typewriter" style="background-color: var(--color-muted); border: 1px solid var(--color-accent); padding: 0.75rem; margin-bottom: 0.75rem; font-size: 0.75rem;">
+                                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                            <span style="color: var(--color-text-muted);">LOCATION_ID:</span>
+                                                            <span style="color: var(--color-dark-brown); font-weight: 700;">NYC_PARK_${String(park.id).padStart(3, '0')}</span>
+                                                        </div>
+                                                        <div style="display: flex; justify-content: space-between;">
+                                                            <span style="color: var(--color-text-muted);">DATA_PRIORITY:</span>
+                                                            <span style="color: var(--color-warm-brown); font-weight: 700; text-transform: uppercase;">${park.dataPriority}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="background-color: rgba(139, 93, 51, 0.1); border: 1px solid var(--color-warm-brown); padding: 0.75rem; margin-bottom: 0.75rem;">
+                                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.75rem; margin-bottom: 0.5rem;">COLOR DISTRIBUTION:</h4>
+                                                        <div class="font-typewriter" style="font-size: 0.75rem;">
+                                                            ${(() => {
+                                                                const parkDetails = getParkDetails(park.name);
+                                                                if (parkDetails && parkDetails.color_percentages) {
+                                                                    // Always show all colors, even if 0%
+                                                                    const allColors = ['gray', 'black', 'cinnamon'];
+                                                                    return allColors.map(color => {
+                                                                        const percentage = parkDetails.color_percentages[color] || 0;
+                                                                        return `
+                                                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                                                <span style="color: var(--color-text-muted); text-transform: capitalize;">${color}:</span>
+                                                                                <span style="font-weight: 700;">${percentage}%</span>
+                                                                            </div>
+                                                                        `;
+                                                                    }).join('');
+                                                                } else {
+                                                                    return `
+                                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                                <span style="color: var(--color-text-muted);">Gray:</span>
+                                                                <span style="font-weight: 700;">${Math.round(park.colorDistribution.gray * 100)}%</span>
+                                                            </div>
+                                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                                <span style="color: var(--color-text-muted);">Black:</span>
+                                                                <span style="font-weight: 700;">${Math.round(park.colorDistribution.black * 100)}%</span>
+                                                            </div>
+                                                            <div style="display: flex; justify-content: space-between;">
+                                                                <span style="color: var(--color-text-muted);">Cinnamon:</span>
+                                                                <span style="font-weight: 700;">${Math.round(park.colorDistribution.cinnamon * 100)}%</span>
+                                                            </div>
+                                                                    `;
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="background-color: rgba(123, 154, 107, 0.1); border: 1px solid var(--color-muted-green); padding: 0.75rem; margin-bottom: 0.75rem;">
+                                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.75rem; margin-bottom: 0.5rem;">MOST SEEN ACTIVITIES (${state.selectedColor.toUpperCase()}):</h4>
+                                                        <div class="font-typewriter" style="font-size: 0.75rem;">
+                                                            ${(() => {
+                                                                const parkDetails = getParkDetails(park.name);
+                                                                if (parkDetails && parkDetails.activity_distribution) {
+                                                                    // Sort activities by count and show top 5 most seen
+                                                                    const sortedActivities = Object.entries(parkDetails.activity_distribution)
+                                                                        .sort((a, b) => b[1] - a[1])
+                                                                        .slice(0, 5);
+                                                                    return sortedActivities.map(([activity, count]) => `
+                                                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                                            <span style="color: var(--color-text-muted); font-size: 0.7rem;">${activity.length > 18 ? activity.substring(0, 18) + '...' : activity}:</span>
+                                                                            <span style="font-weight: 700;">${count}×</span>
+                                                                        </div>
+                                                                    `).join('');
+                                                                } else {
+                                                                    return Object.entries(park.activityPatterns).slice(0, 3).map(([activity, percentage]) => `
+                                                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                                    <span style="color: var(--color-text-muted);">${activity}:</span>
+                                                                    <span style="font-weight: 700;">${percentage}%</span>
+                                                                </div>
+                                                                    `).join('');
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="background-color: rgba(210, 49, 44, 0.1); border: 1px solid var(--color-pop-red); padding: 0.75rem; margin-bottom: 0.75rem;">
+                                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.75rem; margin-bottom: 0.5rem;">CONFIDENCE: ${Math.round(park.confidence.confidence * 100)}%</h4>
+                                                        <div class="font-typewriter" style="font-size: 0.75rem;">
+                                                            ${park.confidence.reasons.slice(0, 2).map(reason => `
+                                                                <div style="margin-bottom: 0.25rem; color: var(--color-text-muted);">• ${reason}</div>
+                                                            `).join('')}
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <button class="btn font-typewriter" style="width: 100%; margin-top: 0.75rem; font-size: 0.875rem; ${park.id === state.selectedParkId ? 'background-color: var(--color-pop-red); color: white;' : 'background-color: var(--color-muted); color: var(--color-dark-brown); border: 1px solid var(--color-accent);'}">
+                                                        ${park.id === state.selectedParkId ? '✓ SELECTED FOR MISSION' : 'SELECT LOCATION'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLearningPage(predictions) {
+            // Load Education HQ data if not already loaded
+            if (!educationHQData) {
+                loadEducationHQData().then(() => {
+                    // Re-render the page with the loaded data
+                    render();
+                });
+                return `
+                    <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh;">
+                        <!-- Top Menu Bar -->
+                        <header class="vintage-paper sticky top-0 z-50" style="background-color: rgba(255, 254, 249, 0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--color-warm-brown);">
+                            <div class="mx-auto px-4 py-6" style="max-width: 72rem;">
+                                <!-- Title Section -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-4">
+                                        <div style="background-color: var(--color-soft-amber); padding: 0.75rem; border-radius: 0.5rem; transform: rotate(3deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                            <span style="font-size: 2rem;">🐿️</span>
+                                        </div>
+                                        <div>
+                                            <h1 style="color: var(--color-dark-brown); font-size: 2.5rem; margin: 0;">TAIL TRAILS</h1>
+                                            <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-top: 0.5rem;">
+                                                DEPT. OF URBAN WILDLIFE STUDIES
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Breadcrumb Navigation -->
+                                <nav class="border-t border-gray-200 pt-4">
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <a href="#" onclick="changePage('home'); return false;" class="text-amber-600 hover:text-amber-800 font-typewriter">🏠 Home</a>
+                                        <span class="text-gray-400">›</span>
+                                        <span class="text-gray-600 font-typewriter">Education HQ</span>
+                                    </div>
+                                </nav>
+                            </div>
+                        </header>
+
+                        <!-- Main Content -->
+                        <div class="mx-auto p-8" style="max-width: 72rem;">
+                            <div class="text-center">
+                                <div style="background-color: var(--color-soft-amber); padding: 2rem; border-radius: 0.5rem; margin: 4rem auto; max-width: 32rem;">
+                                    <span style="font-size: 3rem;">📊</span>
+                                    <h2 style="color: var(--color-dark-brown); margin-top: 1rem;">Loading Education Data...</h2>
+                                    <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.5rem;">Analyzing TTL data for comprehensive statistics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Use TTL data for statistics if available, otherwise fallback to raw data
+            const totalSightings = educationHQData ? educationHQData.total_observations : rawSquirrelData.length;
+            
+            // Use TTL park statistics if available, otherwise calculate from raw data
+            let parkStats = [];
+            if (educationHQData && educationHQData.park_statistics) {
+                parkStats = educationHQData.park_statistics.map(park => ({
+                    name: park.name,
+                    gray: park.color_distribution.gray || 0,
+                    black: park.color_distribution.black || 0,
+                    cinnamon: park.color_distribution.cinnamon || 0,
+                    total: park.total_sightings
+                }));
+            } else {
+                // Fallback to calculating from raw data
+            const parksToUse = parkData.length > 0 ? parkData : 
+                [...new Set(rawSquirrelData.map(s => s.park))].map((parkName, index) => ({
+                    id: index + 1,
+                    name: parkName
+                }));
+            
+                parkStats = parksToUse.map(park => {
+                const parkObservations = rawSquirrelData.filter(s => s.park === park.name);
+                const gray = parkObservations.filter(s => s.color === 'Gray').length;
+                const black = parkObservations.filter(s => s.color === 'Black').length;
+                const cinnamon = parkObservations.filter(s => s.color === 'Cinnamon').length;
+                const total = parkObservations.length;
+                
+                return {
+                    name: park.name,
+                    gray: gray,
+                    black: black,
+                    cinnamon: cinnamon,
+                    total: total
+                };
+                }).sort((a, b) => b.total - a.total);
+            }
+
+            return `
+                <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh;">
+                    <!-- Top Menu Bar -->
+                    <header class="vintage-paper sticky top-0 z-50" style="background-color: rgba(255, 254, 249, 0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--color-warm-brown);">
+                        <div class="mx-auto px-4 py-6" style="max-width: 72rem;">
+                            <!-- Title Section -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div style="background-color: var(--color-soft-amber); padding: 0.75rem; border-radius: 0.5rem; transform: rotate(3deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                        <span style="font-size: 2rem;">🐿️</span>
+                                    </div>
+                                    <div>
+                                        <h1 style="color: var(--color-dark-brown); font-size: 2.5rem; margin: 0;">TAIL TRAILS</h1>
+                                        <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-top: 0.5rem;">
+                                            DEPT. OF URBAN WILDLIFE STUDIES
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Breadcrumb Navigation -->
+                            <nav class="border-t border-gray-200 pt-4">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <a href="#" onclick="changePage('home'); return false;" class="text-amber-600 hover:text-amber-800 font-typewriter">🏠 Home</a>
+                                    <span class="text-gray-400">›</span>
+                                    <span class="text-gray-600 font-typewriter">Education HQ</span>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <div class="mx-auto p-8" style="max-width: 72rem;">
+                        <!-- Page Title -->
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                            <div style="background-color: var(--color-muted-green); padding: 1rem; transform: rotate(-3deg);">
+                                <span style="font-size: 2.5rem;">📊</span>
+                            </div>
+                            <div>
+                                <h1 style="color: var(--color-dark-brown); font-size: 2rem; margin: 0;">EDUCATION HQ</h1>
+                                <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.5rem;">Sighting statistics and informational data</p>
+                                <div class="stamp-badge" style="color: var(--color-muted-green); font-size: 0.75rem; margin-top: 0.75rem;">DATA ANALYSIS</div>
+                            </div>
+                        </div>
+                        <!-- Overall Statistics -->
+                        <div class="grid md:grid-cols-3 gap-6 mb-8">
+                            <div class="card vintage-paper" style="border-color: var(--color-pop-red); transform: rotate(-1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center">
+                                    <div class="stamp-badge" style="color: var(--color-pop-red); font-size: 0.75rem; margin-bottom: 1rem;">TOTAL DATABASE</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">TOTAL SIGHTINGS</h2>
+                                </div>
+                                <div class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; color: var(--color-pop-red); margin-bottom: 0.5rem;">${totalSightings.toLocaleString()}</div>
+                                    <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">Confirmed observations</p>
+                                </div>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-soft-amber); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center">
+                                    <div class="stamp-badge" style="color: var(--color-soft-amber); font-size: 0.75rem; margin-bottom: 1rem;">COVERAGE AREA</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">PARKS MONITORED</h2>
+                                </div>
+                                <div class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; color: var(--color-soft-amber); margin-bottom: 0.5rem;">${parkStats.length}</div>
+                                    <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">NYC park locations</p>
+                                </div>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-muted-green); transform: rotate(1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center">
+                                    <div class="stamp-badge" style="color: var(--color-muted-green); font-size: 0.75rem; margin-bottom: 1rem;">RESEARCH STATUS</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">ACCURACY RATE</h2>
+                                </div>
+                                <div class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; color: var(--color-muted-green); margin-bottom: 0.5rem;">19.3%</div>
+                                    <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">Prediction accuracy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Park Statistics Table -->
+                        <div class="card vintage-paper mb-8" style="border-color: var(--color-soft-amber); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                            <div class="text-center mb-4">
+                                <div class="stamp-badge" style="color: var(--color-soft-amber); font-size: 0.75rem; margin-bottom: 1rem;">LOCATION BREAKDOWN</div>
+                                <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin: 0;">SIGHTINGS BY PARK</h2>
+                                <div style="margin-top: 1rem;">
+                                    <select id="parkSortSelect" onchange="sortParkTable()" style="background-color: var(--color-bg-light); border: 1px solid var(--color-warm-brown); color: var(--color-text); padding: 0.5rem 1rem; font-size: 0.875rem; font-family: 'Courier New', monospace; border-radius: 0.25rem;">
+                                        <option value="sightings-desc">Most Sightings First</option>
+                                        <option value="sightings-asc">Least Sightings First</option>
+                                        <option value="alphabetical">A-Z Alphabetical</option>
+                                        <option value="alphabetical-desc">Z-A Alphabetical</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Color Distribution Summary -->
+                            <div style="background-color: rgba(230, 168, 44, 0.1); border: 1px solid var(--color-soft-amber); padding: 1rem; margin-bottom: 1.5rem; border-radius: 0.5rem;">
+                                <div class="font-typewriter" style="font-size: 0.875rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                    ${(() => {
+                                        let grayPct, blackPct, cinnamonPct;
+                                        
+                                        if (educationHQData && educationHQData.overall_color_percentages) {
+                                            grayPct = Math.round(educationHQData.overall_color_percentages.gray || 0);
+                                            blackPct = Math.round(educationHQData.overall_color_percentages.black || 0);
+                                            cinnamonPct = Math.round(educationHQData.overall_color_percentages.cinnamon || 0);
+                                        } else {
+                                            grayPct = Math.round((parkStats.reduce((sum, p) => sum + p.gray, 0) / totalSightings) * 100);
+                                            blackPct = Math.round((parkStats.reduce((sum, p) => sum + p.black, 0) / totalSightings) * 100);
+                                            cinnamonPct = Math.round((parkStats.reduce((sum, p) => sum + p.cinnamon, 0) / totalSightings) * 100);
+                                        }
+                                        
+                                        // Ensure percentages add up to 100%
+                                        const total = grayPct + blackPct + cinnamonPct;
+                                        const diff = 100 - total;
+                                        
+                                        // Add the difference to the largest percentage
+                                        if (diff !== 0) {
+                                            if (grayPct >= blackPct && grayPct >= cinnamonPct) {
+                                                grayPct += diff;
+                                            } else if (blackPct >= cinnamonPct) {
+                                                blackPct += diff;
+                                            } else {
+                                                cinnamonPct += diff;
+                                            }
+                                        }
+                                        
+                                        return `
+                                            <div style="text-align: center;">
+                                                <div style="color: var(--color-dark-brown); font-weight: 700; font-size: 1.5rem;">${grayPct}%</div>
+                                                <div style="color: var(--color-text-muted);">Gray Squirrels</div>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <div style="color: var(--color-dark-brown); font-weight: 700; font-size: 1.5rem;">${blackPct}%</div>
+                                                <div style="color: var(--color-text-muted);">Black Squirrels</div>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <div style="color: var(--color-dark-brown); font-weight: 700; font-size: 1.5rem;">${cinnamonPct}%</div>
+                                                <div style="color: var(--color-text-muted);">Cinnamon Squirrels</div>
+                                            </div>
+                                        `;
+                                    })()}
+                                </div>
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table id="parkTable" class="font-typewriter" style="font-size: 0.875rem;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: left; padding: 0.75rem; color: var(--color-dark-brown);">PARK NAME</th>
+                                            <th style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown);">GRAY</th>
+                                            <th style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown);">BLACK</th>
+                                            <th style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown);">CINNAMON</th>
+                                            <th style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown);">TOTAL</th>
+                                            <th style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown);">% OF TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="parkTableBody">
+                                        ${(() => {
+                                            // Calculate max values for consistent scaling
+                                            const maxGray = Math.max(...parkStats.map(p => p.gray));
+                                            const maxBlack = Math.max(...parkStats.map(p => p.black));
+                                            const maxCinnamon = Math.max(...parkStats.map(p => p.cinnamon));
+                                            const maxValue = Math.max(maxGray, maxBlack, maxCinnamon);
+                                            
+                                            return parkStats.map((park, index) => {
+                                                const percentage = Math.round((park.total / totalSightings) * 100);
+                                                const dominantColor = park.gray >= park.black && park.gray >= park.cinnamon ? 'gray' : 
+                                                                   park.black >= park.cinnamon ? 'black' : 'cinnamon';
+                                                
+                                                return `
+                                                <tr style="background-color: ${index % 2 === 0 ? 'var(--color-muted)' : 'transparent'};">
+                                                        <td style="padding: 0.75rem; color: var(--color-dark-brown); font-weight: 700;">
+                                                            ${park.name}
+                                                            ${park.total > 20 ? '<span style="color: var(--color-muted-green); font-size: 0.75rem;"> (HIGH ACTIVITY)</span>' : ''}
+                                                        </td>
+                                                        <td style="text-align: center; padding: 0.75rem; color: ${dominantColor === 'gray' ? 'var(--color-dark-brown)' : 'var(--color-text-muted)'}; font-weight: ${dominantColor === 'gray' ? '700' : '400'};">
+                                                            ${park.gray}
+                                                            ${park.gray > 0 ? `<div style="width: ${Math.max(2, (park.gray / maxValue) * 50)}px; height: 4px; background-color: #9CA3AF; margin: 2px auto;"></div>` : ''}
+                                                        </td>
+                                                        <td style="text-align: center; padding: 0.75rem; color: ${dominantColor === 'black' ? 'var(--color-dark-brown)' : 'var(--color-text-muted)'}; font-weight: ${dominantColor === 'black' ? '700' : '400'};">
+                                                            ${park.black}
+                                                            ${park.black > 0 ? `<div style="width: ${Math.max(2, (park.black / maxValue) * 50)}px; height: 4px; background-color: #374151; margin: 2px auto;"></div>` : ''}
+                                                        </td>
+                                                        <td style="text-align: center; padding: 0.75rem; color: ${dominantColor === 'cinnamon' ? 'var(--color-dark-brown)' : 'var(--color-text-muted)'}; font-weight: ${dominantColor === 'cinnamon' ? '700' : '400'};">
+                                                            ${park.cinnamon}
+                                                            ${park.cinnamon > 0 ? `<div style="width: ${Math.max(2, (park.cinnamon / maxValue) * 50)}px; height: 4px; background-color: #D97706; margin: 2px auto;"></div>` : ''}
+                                                        </td>
+                                                    <td style="text-align: center; padding: 0.75rem; color: var(--color-dark-brown); font-weight: 700;">
+                                                        ${park.total}
+                                                    </td>
+                                                    <td style="text-align: center; padding: 0.75rem; color: var(--color-text-muted);">
+                                                        ${percentage}%
+                                                    </td>
+                                                </tr>
+                                                `;
+                                            });
+                                        })()}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="font-typewriter text-center" style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-muted);">
+                                Real data from ${totalSightings} squirrel sightings across ${parkStats.length} NYC parks
+                            </div>
+                        </div>
+
+                        <!-- Interesting Facts -->
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="card vintage-paper" style="border-color: var(--color-pop-red); transform: rotate(-1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center mb-4">
+                                    <div class="stamp-badge" style="color: var(--color-pop-red); font-size: 0.75rem; margin-bottom: 1rem;">RESEARCH FINDINGS</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin: 0;">NOTABLE PATTERNS</h2>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="background-color: rgba(210, 49, 44, 0.1); padding: 0.75rem; border: 1px solid var(--color-pop-red);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">🐿️ SIGHTING PATTERNS:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">All sightings observed between3:00-4:00 PM</p>
+                                    </div>
+                                    <div style="background-color: rgba(230, 168, 44, 0.1); padding: 0.75rem; border: 1px solid var(--color-soft-amber);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">🌳 PARK FEATURES:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;"></p>
+                                    </div>
+                                    <div style="background-color: rgba(123, 154, 107, 0.1); padding: 0.75rem; border: 1px solid var(--color-muted-green);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">🎨 COLOR PATTERNS:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">Gray squirrels most common across all parks</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-warm-brown); transform: rotate(1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center mb-4">
+                                    <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-bottom: 1rem;">DATA QUALITY</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin: 0;">COLLECTION STATUS</h2>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="background-color: rgba(139, 93, 51, 0.1); padding: 0.75rem; border: 1px solid var(--color-warm-brown);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">📈 MONTHLY GROWTH:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">+16 new observations this month</p>
+                                    </div>
+                                    <div style="background-color: rgba(230, 168, 44, 0.1); padding: 0.75rem; border: 1px solid var(--color-soft-amber);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">👥 CONTRIBUTORS:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">283 unique squirrel observations</p>
+                                    </div>
+                                    <div style="background-color: rgba(123, 154, 107, 0.1); padding: 0.75rem; border: 1px solid var(--color-muted-green);">
+                                        <h4 class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin-bottom: 0.5rem;">🎯 VERIFICATION:</h4>
+                                        <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">94% of reports verified by experts</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDataPage() {
+            return `
+                <div class="vintage-paper" style="background-color: var(--color-cream); min-height: 100vh;">
+                    <!-- Top Menu Bar -->
+                    <header class="vintage-paper sticky top-0 z-50" style="background-color: rgba(255, 254, 249, 0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--color-warm-brown);">
+                        <div class="mx-auto px-4 py-6" style="max-width: 72rem;">
+                            <!-- Title Section -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div style="background-color: var(--color-soft-amber); padding: 0.75rem; border-radius: 0.5rem; transform: rotate(3deg); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                        <span style="font-size: 2rem;">🐿️</span>
+                                    </div>
+                                    <div>
+                                        <h1 style="color: var(--color-dark-brown); font-size: 2.5rem; margin: 0;">TAIL TRAILS</h1>
+                                        <div class="stamp-badge" style="color: var(--color-warm-brown); font-size: 0.75rem; margin-top: 0.5rem;">
+                                            DEPT. OF URBAN WILDLIFE STUDIES
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Breadcrumb Navigation -->
+                            <nav class="border-t border-gray-200 pt-4">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <a href="#" onclick="changePage('home'); return false;" class="text-amber-600 hover:text-amber-800 font-typewriter">🏠 Home</a>
+                                    <span class="text-gray-400">›</span>
+                                    <span class="text-gray-600 font-typewriter">Research Lab</span>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <div class="mx-auto p-8" style="max-width: 64rem;">
+                        <!-- Page Title -->
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                            <div style="background-color: var(--color-pop-red); padding: 1rem; transform: rotate(2deg);">
+                                <span style="font-size: 2.5rem;">🔬</span>
+                            </div>
+                            <div>
+                                <h1 style="color: var(--color-dark-brown); font-size: 2rem; margin: 0;">DATA COLLECTION CENTER</h1>
+                                <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.5rem;">Add your squirrel sightings to the database</p>
+                                <div class="stamp-badge" style="color: var(--color-pop-red); font-size: 0.75rem; margin-top: 0.75rem;">SIGHTING SUBMISSION</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Upload Interface -->
+                        <div class="card vintage-paper mb-8" style="border-color: var(--color-pop-red); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                            <div class="text-center mb-6">
+                                <div class="stamp-badge" style="color: var(--color-pop-red); font-size: 0.75rem; margin-bottom: 1rem;">FIELD DATA SUBMISSION</div>
+                                <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin-bottom: 0.5rem;">UPLOAD NEW OBSERVATIONS</h2>
+                                <p class="font-typewriter" style="color: var(--color-text-muted); margin-top: 0.5rem;">Help improve our prediction models with your data!</p>
+                            </div>
+
+                            <!-- File Upload Area -->
+                            <div class="text-center" style="background-color: var(--color-muted); border: 2px dashed var(--color-warm-brown); padding: 2rem; cursor: pointer; transition: background-color 0.2s; margin-bottom: 1.5rem;">
+                                <div style="margin: 0 auto 1rem; width: 4rem; height: 4rem; background-color: var(--color-warm-brown); border-radius: 9999px; display: flex; align-items: center; justify-content: center; transform: rotate(3deg);">
+                                    <span style="font-size: 2rem;">📷</span>
+                                </div>
+                                <h3 class="font-typewriter" style="color: var(--color-dark-brown); margin-bottom: 0.5rem;">DRAG & DROP FILES HERE</h3>
+                                <p class="font-typewriter" style="color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 1rem;">Or click to browse: photos, videos, observation logs</p>
+                                <button class="btn font-typewriter" style="background-color: var(--color-warm-brown); color: white;">SELECT FILES</button>
+                            </div>
+
+                            <!-- Quick Entry Form -->
+                            <form id="sightingForm" style="background-color: rgba(230, 168, 44, 0.1); padding: 1.5rem; border: 1px solid var(--color-soft-amber); border-radius: 0.5rem;">
+                                <h4 class="font-typewriter" style="color: var(--color-dark-brown); margin-bottom: 1rem;">QUICK OBSERVATION FORM</h4>
+                                <div id="formMessage" style="display: none; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.25rem; font-size: 0.875rem;"></div>
+                                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">LOCATION: <span style="color: var(--color-pop-red);">*</span></label>
+                                        <select id="locationSelect" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-warm-brown); border-radius: 0.25rem; font-family: 'Courier Prime', monospace; background-color: var(--color-card); color: var(--color-dark-brown);">
+                                            <option value="">Select Park...</option>
+                                            ${(parkData.length > 0 ? parkData : [...new Set(rawSquirrelData.map(s => s.park))].map(name => ({name}))).map(park => `<option value="${park.name}">${park.name}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">DATE_OBSERVED:</label>
+                                        <input type="date" id="dateObserved" style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-warm-brown); border-radius: 0.25rem; font-family: 'Courier Prime', monospace; background-color: var(--color-card); color: var(--color-dark-brown);" />
+                                        <p class="font-typewriter" style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">⏰ Observations must be between 3:00-4:00 PM</p>
+                                    </div>
+                                    <div>
+                                        <label class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">SQUIRREL_COLOR: <span style="color: var(--color-pop-red);">*</span></label>
+                                        <select id="colorSelect" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-warm-brown); border-radius: 0.25rem; font-family: 'Courier Prime', monospace; background-color: var(--color-card); color: var(--color-dark-brown);">
+                                            <option value="">Select Color...</option>
+                                            <option value="Gray">Gray</option>
+                                            <option value="Black">Black</option>
+                                            <option value="Cinnamon">Cinnamon</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">ACTIVITY:</label>
+                                        <input type="text" id="activityInput" placeholder="e.g., Foraging, Running, Climbing, Eating..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-warm-brown); border-radius: 0.25rem; font-family: 'Courier Prime', monospace; background-color: var(--color-card); color: var(--color-dark-brown);">
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Submit Button -->
+                            <button id="submitButton" class="btn btn-primary w-full" style="margin-top: 1.5rem; padding: 1.5rem; font-size: 1.125rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                <span style="font-size: 1.5rem; margin-right: 0.75rem;">📊</span>
+                                SUBMIT OBSERVATION DATA
+                            </button>
+                        </div>
+
+                        <!-- Guidelines and Community Stats -->
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="card vintage-paper" style="border-color: var(--color-muted-green); transform: rotate(-1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center mb-4">
+                                    <div class="stamp-badge" style="color: var(--color-muted-green); font-size: 0.75rem; margin-bottom: 1rem;">DATA COLLECTION PROTOCOL</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin: 0;">SUBMISSION GUIDELINES</h2>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div style="display: flex; gap: 0.75rem;">
+                                        <div class="font-typewriter" style="background-color: var(--color-muted-green); color: white; padding: 0.25rem; font-size: 0.75rem; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">1</div>
+                                        <p class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin: 0;"><strong>PHOTOS:</strong> Clear images of squirrels in their environment</p>
+                                    </div>
+                                    <div style="display: flex; gap: 0.75rem;">
+                                        <div class="font-typewriter" style="background-color: var(--color-soft-amber); color: var(--color-dark-brown); padding: 0.25rem; font-size: 0.75rem; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">2</div>
+                                        <p class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin: 0;"><strong>LOCATION:</strong> Accurate park name and general area</p>
+                                    </div>
+                                    <div style="display: flex; gap: 0.75rem;">
+                                        <div class="font-typewriter" style="background-color: var(--color-warm-brown); color: white; padding: 0.25rem; font-size: 0.75rem; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">3</div>
+                                        <p class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin: 0;"><strong>TIMING:</strong> Observations between 3:00-4:00 PM only</p>
+                                    </div>
+                                    <div style="display: flex; gap: 0.75rem;">
+                                        <div class="font-typewriter" style="background-color: var(--color-pop-red); color: white; padding: 0.25rem; font-size: 0.75rem; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">4</div>
+                                        <p class="font-typewriter" style="color: var(--color-dark-brown); font-size: 0.875rem; margin: 0;"><strong>DETAILS:</strong> Color, activity, park location details</p>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="background-color: rgba(123, 154, 107, 0.1); border: 1px solid var(--color-muted-green); padding: 0.75rem; margin-top: 1.5rem;">
+                                    <p class="font-typewriter" style="font-size: 0.75rem; color: var(--color-dark-brown); margin: 0;">Quality data = better predictions for everyone!</p>
+                                </div>
+                            </div>
+
+                            <div class="card vintage-paper" style="border-color: var(--color-soft-amber); transform: rotate(1deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                                <div class="text-center mb-6">
+                                    <div class="stamp-badge" style="color: var(--color-soft-amber); font-size: 0.75rem; margin-bottom: 1rem;">COMMUNITY IMPACT</div>
+                                    <h2 style="color: var(--color-dark-brown); font-size: 1.25rem; margin: 0;">YOUR CONTRIBUTIONS MATTER</h2>
+                                </div>
+                                <div style="background-color: rgba(230, 168, 44, 0.1); padding: 1rem; border: 1px solid var(--color-soft-amber); margin-bottom: 1.5rem;">
+                                    <h3 class="font-typewriter" style="color: var(--color-dark-brown); margin-bottom: 0.75rem;">═══ THIS MONTH ═══</h3>
+                                    <div class="font-typewriter" style="font-size: 0.875rem;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <span style="color: var(--color-text-muted);">TOTAL_OBSERVATIONS:</span>
+                                            <span style="color: var(--color-dark-brown); font-weight: 700;">${educationHQData ? educationHQData.total_observations : totalSightings}</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <span style="color: var(--color-text-muted);">UNIQUE_PARKS:</span>
+                                            <span style="color: var(--color-dark-brown); font-weight: 700;">${educationHQData ? educationHQData.unique_parks : parkStats.length}</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: var(--color-text-muted);">MODEL_ACCURACY:</span>
+                                            <span style="color: var(--color-muted-green); font-weight: 700;">${educationHQData ? (educationHQData.model_accuracy * 100).toFixed(1) + '%' : '19.3%'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="background-color: rgba(123, 154, 107, 0.1); padding: 1rem; border: 1px solid var(--color-muted-green);">
+                                    <h4 class="font-typewriter" style="color: var(--color-dark-brown); margin-bottom: 0.75rem;">🏆 TOP CONTRIBUTORS THIS MONTH</h4>
+                                    <div class="font-typewriter" style="font-size: 0.875rem;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <span style="color: var(--color-text-muted);">SARAH_K:</span>
+                                            <span style="color: var(--color-dark-brown);">9 observations</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <span style="color: var(--color-text-muted);">MIKE_R:</span>
+                                            <span style="color: var(--color-dark-brown);">7 observations</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: var(--color-text-muted);">DR_CHEN:</span>
+                                            <span style="color: var(--color-dark-brown);">3 observations</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // ===== EVENT HANDLERS =====
+        function changePage(page) {
+            state.currentPage = page;
+            render();
+            if (page === 'prediction') {
+                // Load predictions for the current color when opening the page
+                loadPredictionsForColor(state.selectedColor);
+            }
+            // Education HQ data loading is now handled in renderLearningPage()
+        }
+
+        function selectColor(color) {
+            state.selectedColor = color;
+            loadPredictionsForColor(color);
+            // Reload park details with the selected color filter
+            loadParkDetails(color);
+        }
+
+        function selectPark(parkId) {
+            state.selectedParkId = parkId;
+            render();
+        }
+
+        function attachEventListeners() {
+            // Event listeners are attached via inline onclick handlers in the HTML
+            
+            // Add form submission handler (only if the element exists)
+            const submitButton = document.getElementById('submitButton');
+            if (submitButton && typeof handleSightingSubmission === 'function') {
+                submitButton.addEventListener('click', handleSightingSubmission);
+            }
+        }
+
+        async function handleSightingSubmission() {
+            const locationSelect = document.getElementById('locationSelect');
+            const colorSelect = document.getElementById('colorSelect');
+            const dateObserved = document.getElementById('dateObserved');
+            const activityInput = document.getElementById('activityInput');
+            const formMessage = document.getElementById('formMessage');
+            const submitButton = document.getElementById('submitButton');
+            
+            // Validate required fields
+            if (!locationSelect.value || !colorSelect.value) {
+                showFormMessage('Please select both location and squirrel color (required fields).', 'error');
+                return;
+            }
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span style="font-size: 1.5rem; margin-right: 0.75rem;">⏳</span>SUBMITTING...';
+            
+            try {
+                const submissionData = {
+                    location: locationSelect.value,
+                    color: colorSelect.value,
+                    date_observed: dateObserved.value,
+                    activity: activityInput.value
+                };
+                
+                const response = await fetch('http://localhost:5000/submit_sighting', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(submissionData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showFormMessage(`✅ ${result.message} Sighting ID: ${result.sighting_id}`, 'success');
+                    // Reset form
+                    locationSelect.value = '';
+                    colorSelect.value = '';
+                    dateObserved.value = '';
+                    activityInput.value = '';
+                } else {
+                    showFormMessage(`❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showFormMessage('❌ Failed to submit sighting. Please check if the API server is running.', 'error');
+            } finally {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<span style="font-size: 1.5rem; margin-right: 0.75rem;">📊</span>SUBMIT OBSERVATION DATA';
+            }
+        }
+
+        function showFormMessage(message, type) {
+            const formMessage = document.getElementById('formMessage');
+            if (formMessage) {
+                formMessage.style.display = 'block';
+                formMessage.textContent = message;
+                formMessage.style.backgroundColor = type === 'success' ? 'rgba(123, 154, 107, 0.1)' : 'rgba(210, 49, 44, 0.1)';
+                formMessage.style.border = `1px solid ${type === 'success' ? 'var(--color-muted-green)' : 'var(--color-pop-red)'}`;
+                formMessage.style.color = type === 'success' ? 'var(--color-muted-green)' : 'var(--color-pop-red)';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+
+        // Park table sorting function
+        function sortParkTable() {
+            const select = document.getElementById('parkSortSelect');
+            const table = document.getElementById('parkTable');
+            const tbody = document.getElementById('parkTableBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            if (!select || !table || !tbody || rows.length === 0) return;
+            
+            const sortBy = select.value;
+            
+            rows.sort((a, b) => {
+                const nameA = a.cells[0].textContent.trim();
+                const nameB = b.cells[0].textContent.trim();
+                const totalA = parseInt(a.cells[4].textContent.trim());
+                const totalB = parseInt(b.cells[4].textContent.trim());
+                
+                switch (sortBy) {
+                    case 'sightings-desc':
+                        return totalB - totalA;
+                    case 'sightings-asc':
+                        return totalA - totalB;
+                    case 'alphabetical':
+                        return nameA.localeCompare(nameB);
+                    case 'alphabetical-desc':
+                        return nameB.localeCompare(nameA);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Clear and re-append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach((row, index) => {
+                // Update alternating row colors
+                row.style.backgroundColor = index % 2 === 0 ? 'var(--color-muted)' : 'transparent';
+                tbody.appendChild(row);
+            });
+        }
+
+        // Initialize the application
+        async function initializeApp() {
+            state.dataLoading = true;
+            state.dataError = null;
+        render();
+            
+            const success = await loadTTLData();
+            
+            if (success) {
+                // Load park details for enhanced park cards with default color
+                await loadParkDetails(state.selectedColor);
+                
+                // Populate park data from TTL
+                parkData = createParkDataFromCSV();
+                console.log(`Created park data for ${parkData.length} parks from TTL data`);
+                state.dataLoading = false;
+                state.dataError = null;
+            } else {
+                state.dataLoading = false;
+                state.dataError = 'Failed to load TTL data';
+            }
+            
+            render();
+        }
+
+        // Global functions
+        window.initializeApp = initializeApp;
+        window.sortParkTable = sortParkTable;
+
+        // Initial render and data loading
+        initializeApp();
+    </script>
+</body>
+</html>
