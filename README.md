@@ -10,8 +10,9 @@ A web application that uses machine learning to predict squirrel park locations 
 ## Installation
 
 1. **Clone or download the project** to your local machine
+   https://github.com/KatherineTu24/Squirrels-Website-Team2.git
 
-2. **Install Python dependencies**:
+3. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
@@ -139,4 +140,5 @@ This will:
 - Load data from `Ontology.tll`
 - Train a new Random Forest classifier
 - Save updated model files to `artifacts/`
+
 
